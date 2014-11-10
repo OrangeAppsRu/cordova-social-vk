@@ -58,12 +58,13 @@
         <param name="android-package" value="ru.trilan.socialvk.SocialVk"/>
       </feature>
     </config-file>
-    <!--source-file src="src/android/libs/odnoklassniki-android-sdk.jar" target-dir="libs/" /-->
-    <source-file src="src/android/SocialVk.java" target-dir="src/ru/trilan/socialvk/" />
-
-    <config-file target="AndroidManifest.xml" parent="manifest/application">
-      <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <activity android:name="com.vk.sdk.VKOpenAuthActivity" >
+      </activity>
     </config-file>
+
+    <source-file src="src/android/vksdk_library.jar" target-dir="libs/" />
+    <source-file src="src/android/SocialVk.java" target-dir="src/ru/trilan/socialvk/" />
   </platform>
 
 </plugin>

@@ -11,19 +11,24 @@ import android.content.Context;
 import android.widget.Toast;
 import android.util.Log;
 import android.os.AsyncTask;
+import android.app.AlertDialog;
+import android.app.Activity;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
 
-import ru.ok.android.sdk.Odnoklassniki;
-import ru.ok.android.sdk.OkTokenRequestListener;
-import ru.ok.android.sdk.util.OkScope;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.dialogs.VKCaptchaDialog;
+import com.vk.sdk.VKScope;
 
 public class SocialVk extends CordovaPlugin {
   private static final String TAG = "SocialVk";
   private static final String ACTION_INIT = "initSocialVk";
   private static final String ACTION_SHARE = "share";
-  private Odnoklassniki odnoklassnikiObject;
   private CallbackContext _callbackContext;
 
   /**
@@ -38,23 +43,82 @@ public class SocialVk extends CordovaPlugin {
   public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
     this._callbackContext = callbackContext;
     if(ACTION_INIT.equals(action)) {
-      return init(args.getString(0), args.getString(1), args.getString(2));
+      return init(args.getString(0));
     } else if (ACTION_SHARE.equals(action)) {
       return shareOrLogin(args.getString(0), args.getString(1));
+    } else {
+      Log.i(TAG, "Unknown action: "+action);
     }
     return true;
   }
 
-  private boolean init(String appId, String secret, String key)
+  private boolean init(String appId)
   {
-    odnoklassnikiObject = Odnoklassniki.createInstance(webView.getContext(), appId, secret, key);
-    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-    _callbackContext.success();
+    final String sTokenKey = "VK_ACCESS_TOKEN";
+    VKSdkListener sdkListener = new VKSdkListener() {
+        private void success() {
+          _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+          _callbackContext.success();
+        }
+        private void fail() {
+          _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+          _callbackContext.error("Error");
+        }
+        
+        @Override
+        public void onCaptchaError(VKError captchaError) {
+          new VKCaptchaDialog(captchaError).show();
+          fail();
+        }
+        
+        @Override
+        public void onTokenExpired(VKAccessToken expiredToken) {
+          //VKSdk.authorize(scope);
+          Log.w(TAG, "VK token expired");
+          success();
+        }
+                    
+        @Override
+        public void onAccessDenied(VKError authorizationError) {
+          new AlertDialog.Builder(webView.getContext())
+            .setMessage(authorizationError.errorMessage)
+            .show();
+          Log.w(TAG, "VK Access denied!");
+          fail();
+        }
+                            
+        @Override
+        public void onReceiveNewToken(VKAccessToken newToken) {
+          Log.i(TAG, "VK new token: "+newToken.accessToken);
+          newToken.saveTokenToSharedPreferences(webView.getContext(), sTokenKey);
+          success();
+        }
+            
+        @Override
+        public void onAcceptUserToken(VKAccessToken token) {
+          Log.i(TAG, "VK accept token: "+token.accessToken);
+          success();
+        }
+      };
+        
+    Log.i(TAG, "VK initialize");
+    VKSdk.initialize(sdkListener, appId, VKAccessToken.tokenFromSharedPreferences(webView.getContext(), sTokenKey));
+    VKUIHelper.onCreate((Activity)webView.getContext());
+
+    //_callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+    //_callbackContext.success();
     return true;
   }
 
   private boolean shareOrLogin(final String url, final String comment)
   {
+    final String[] scope = new String[]{VKScope.WALL};
+    if(!VKSdk.isLoggedIn()) {
+      VKSdk.authorize(scope, true, false);
+    } else {
+      // TODO sharing
+    }
+    /*
     //определяем callback на операции с получением токена
     odnoklassnikiObject.setTokenRequestListener(new OkTokenRequestListener() {
         @Override
@@ -83,11 +147,13 @@ public class SocialVk extends CordovaPlugin {
       });
     //вызываем запрос авторизации. После OAuth будет вызван callback, определенный для объекта
     odnoklassnikiObject.requestAuthorization(webView.getContext(), false, OkScope.VALUABLE_ACCESS);
+    */
     return true;
   }
 
   private boolean share(final String url, final String comment)
   {
+    /*
     final Map<String, String> params = new HashMap<String, String>();
     params.put("linkUrl", url);
     params.put("comment", comment);
@@ -106,6 +172,7 @@ public class SocialVk extends CordovaPlugin {
         _callbackContext.success();
       }
     }.execute();
+    */
     return true;
   }
 }
