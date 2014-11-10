@@ -58,7 +58,7 @@
     NSString *sourceURL = [command.arguments objectAtIndex:0];
     NSString* description = [command.arguments objectAtIndex:1];
     NSString* imageURL = [command.arguments objectAtIndex:2];
-    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
+    //NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
 
     if(![VKSdk isLoggedIn]) {
         [self odnoklassnikiLoginWithBlock:^(NSString *token) {
@@ -68,9 +68,9 @@
                 [sh setWantsFullScreenLayout:YES];
                 [sh setOtherAttachmentsStrings:@[sourceURL]];
                 sh.text =  description;
-                sh.uploadImages = @[[VKUploadImage uploadImageWithData:imageData andParams:nil]];
+                //sh.uploadImages = @[[VKUploadImage uploadImageWithData:imageData andParams:nil]];
                 UIViewController *vc = [self findViewController];
-                [sh presentIn:vc];
+                [sh performSelector:@selector(presentIn:) withObject:vc afterDelay:2.f];
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             } else {
@@ -84,7 +84,7 @@
         [sh setWantsFullScreenLayout:YES];
         [sh setOtherAttachmentsStrings:@[sourceURL]];
         sh.text =  description;
-        sh.uploadImages = @[[VKUploadImage uploadImageWithData:imageData andParams:nil]];
+        //sh.uploadImages = @[[VKUploadImage uploadImageWithData:imageData andParams:nil]];
         UIViewController *vc = [self findViewController];
         [sh presentIn:vc];
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
