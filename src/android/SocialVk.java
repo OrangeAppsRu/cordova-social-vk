@@ -8,6 +8,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 import android.util.Log;
 import android.os.AsyncTask;
@@ -45,7 +46,7 @@ public class SocialVk extends CordovaPlugin {
     if(ACTION_INIT.equals(action)) {
       return init(args.getString(0));
     } else if (ACTION_SHARE.equals(action)) {
-      return shareOrLogin(args.getString(0), args.getString(1));
+      return shareOrLogin(args.getString(0), args.getString(1), args.getString(2));
     } else {
       Log.i(TAG, "Unknown action: "+action);
     }
@@ -54,6 +55,7 @@ public class SocialVk extends CordovaPlugin {
 
   private boolean init(String appId)
   {
+    this.cordova.setActivityResultCallback(this);
     final String sTokenKey = "VK_ACCESS_TOKEN";
     VKSdkListener sdkListener = new VKSdkListener() {
         private void success() {
@@ -110,11 +112,12 @@ public class SocialVk extends CordovaPlugin {
     return true;
   }
 
-  private boolean shareOrLogin(final String url, final String comment)
+  private boolean shareOrLogin(final String url, final String comment, final String imageUrl)
   {
+    this.cordova.setActivityResultCallback(this);
     final String[] scope = new String[]{VKScope.WALL};
     if(!VKSdk.isLoggedIn()) {
-      VKSdk.authorize(scope, true, false);
+      VKSdk.authorize(scope, false, true);
     } else {
       // TODO sharing
     }
@@ -175,4 +178,13 @@ public class SocialVk extends CordovaPlugin {
     */
     return true;
   }
+
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+    Log.i(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+    super.onActivityResult(requestCode, resultCode, data);
+    if(resultCode != 0)
+      VKUIHelper.onActivityResult((Activity)webView.getContext(), requestCode, resultCode, data);
+  }
+  
 }
