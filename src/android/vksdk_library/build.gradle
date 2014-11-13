@@ -24,6 +24,19 @@ dependencies {
     compile 'com.android.support:support-v4:20.0.0'
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:+'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
 if (project.hasProperty('officialBuild')) {
     def String releaseRepositoryUrl = hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL : 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
     def String snapshotRepositoryUrl = hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL : 'https://oss.sonatype.org/content/repositories/snapshots/'

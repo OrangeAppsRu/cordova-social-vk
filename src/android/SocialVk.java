@@ -7,6 +7,8 @@ import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -17,6 +19,9 @@ import android.app.Activity;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.HttpURLConnection;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
@@ -24,7 +29,10 @@ import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
+import com.vk.sdk.dialogs.VKShareDialog;
 import com.vk.sdk.VKScope;
+import com.vk.sdk.api.photo.VKUploadImage;
+import com.vk.sdk.api.photo.VKImageParameters;
 
 public class SocialVk extends CordovaPlugin {
   private static final String TAG = "SocialVk";
@@ -32,12 +40,20 @@ public class SocialVk extends CordovaPlugin {
   private static final String ACTION_SHARE = "share";
   private CallbackContext _callbackContext;
 
+  private String savedUrl = null;
+  private String savedComment = null;
+  private String savedImageUrl = null;
+
   /**
    * Gets the application context from cordova's main activity.
    * @return the application context
    */
   private Context getApplicationContext() {
     return this.webView.getContext();
+  }
+
+  private Activity getActivity() {
+    return (Activity)this.webView.getContext();
   }
 	
   @Override
@@ -94,18 +110,20 @@ public class SocialVk extends CordovaPlugin {
           Log.i(TAG, "VK new token: "+newToken.accessToken);
           newToken.saveTokenToSharedPreferences(webView.getContext(), sTokenKey);
           success();
+          share(savedUrl, savedComment, savedImageUrl);
         }
             
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
           Log.i(TAG, "VK accept token: "+token.accessToken);
           success();
+          share(savedUrl, savedComment, savedImageUrl);
         }
       };
         
     Log.i(TAG, "VK initialize");
     VKSdk.initialize(sdkListener, appId, VKAccessToken.tokenFromSharedPreferences(webView.getContext(), sTokenKey));
-    VKUIHelper.onCreate((Activity)webView.getContext());
+    VKUIHelper.onCreate(getActivity());
 
     //_callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
     //_callbackContext.success();
@@ -115,67 +133,53 @@ public class SocialVk extends CordovaPlugin {
   private boolean shareOrLogin(final String url, final String comment, final String imageUrl)
   {
     this.cordova.setActivityResultCallback(this);
-    final String[] scope = new String[]{VKScope.WALL};
+    final String[] scope = new String[]{VKScope.WALL, VKScope.PHOTOS};
     if(!VKSdk.isLoggedIn()) {
+      savedUrl = url;
+      savedComment = comment;
+      savedImageUrl = imageUrl;
       VKSdk.authorize(scope, false, true);
     } else {
-      // TODO sharing
+      share(url, comment, imageUrl);
     }
-    /*
-    //определяем callback на операции с получением токена
-    odnoklassnikiObject.setTokenRequestListener(new OkTokenRequestListener() {
-        @Override
-        public void onSuccess(String token) {
-          Log.i(TAG, "Odnoklassniki accessToken = " + token);
-          if (token == null)
-            Toast.makeText(webView.getContext(), "Не удалось авторизоваться в приложении через \"Одноклассников\"."
-                           + "\nОшибка на сервере \"Одноклассников\".", Toast.LENGTH_LONG).show();
-          else
-            share(url, comment);
-        }
-
-        @Override
-        public void onCancel() {
-          Log.i(TAG, "Auth cancel");
-          Toast.makeText(webView.getContext(), "Не удалось авторизоваться в приложении через \"Одноклассников\"."
-                         + "\nПроверьте соединение с Интернетом.", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        public void onError() {
-          Log.i(TAG, "Auth error");
-          Toast.makeText(webView.getContext(), "Ошибка во время авторизации в приложении через \"Одноклассников\".",
-                         Toast.LENGTH_LONG).show();
-        }
-      });
-    //вызываем запрос авторизации. После OAuth будет вызван callback, определенный для объекта
-    odnoklassnikiObject.requestAuthorization(webView.getContext(), false, OkScope.VALUABLE_ACCESS);
-    */
     return true;
   }
 
-  private boolean share(final String url, final String comment)
+  private boolean share(final String url, final String comment, final String imageUrl)
   {
-    /*
-    final Map<String, String> params = new HashMap<String, String>();
-    params.put("linkUrl", url);
-    params.put("comment", comment);
+    if(url == null || comment == null) return false;
+    
     new AsyncTask<String, Void, String>() {
+      private Bitmap image = null;
       @Override protected String doInBackground(String... args) {
-        try {
-          return odnoklassnikiObject.request("share.addLink", params, "get");
-        } catch (IOException e) {
-          e.printStackTrace();
-          _callbackContext.error("Error");
-        }
-        return null;
+        if(imageUrl != null)
+          image = getBitmapFromURL(imageUrl);
+        return "";
       }
       @Override protected void onPostExecute(String result) {
-        Log.i(TAG, "OK share result" + result);
-        _callbackContext.success();
+        VKShareDialog vsh = new VKShareDialog()
+          .setText(comment)
+          .setAttachmentLink("", url)
+          .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+              public void onVkShareComplete(int postId) {
+                Log.i(TAG, "VK sharing complete");
+              }
+              public void onVkShareCancel() {
+                Log.i(TAG, "VK sharing cancelled");
+              }
+            });
+        if(image != null) {
+          vsh.setAttachmentImages(new VKUploadImage[]{
+              new VKUploadImage(image, VKImageParameters.pngImage())
+            });
+        }
+        vsh.show(getActivity().getFragmentManager().beginTransaction(), "VK_SHARE_DIALOG");
       }
     }.execute();
-    */
+
+    savedUrl = null;
+    savedComment = null;
+    savedImageUrl = null;
     return true;
   }
 
@@ -184,7 +188,25 @@ public class SocialVk extends CordovaPlugin {
     Log.i(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
     super.onActivityResult(requestCode, resultCode, data);
     if(resultCode != 0)
-      VKUIHelper.onActivityResult((Activity)webView.getContext(), requestCode, resultCode, data);
+      VKUIHelper.onActivityResult(getActivity(), requestCode, resultCode, data);
   }
   
+  public static Bitmap getBitmapFromURL(String src) {
+    try {
+      URL url = new URL(src);
+      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      connection.setDoInput(true);
+      connection.connect();
+      InputStream input = connection.getInputStream();
+      Bitmap myBitmap = BitmapFactory.decodeStream(input);
+      if(myBitmap == null) {
+        Log.e(TAG, "Can't load image from "+src);
+      }
+      return myBitmap;
+    } catch (IOException e) {
+      // Log exception
+      Log.e(TAG, "Can't fetch image from url "+src+": "+e);
+      return null;
+    }
+  }
 }

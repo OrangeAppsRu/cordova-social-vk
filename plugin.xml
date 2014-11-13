@@ -52,6 +52,9 @@
 
   <!-- android -->
   <platform name="android">
+    <info>
+      You should add 'android.library.reference.2=vksdk_library' to project.properties
+    </info>
     <!-- Cordova 2.5+ -->
     <config-file target="config.xml" parent="/*">
       <feature name="SocialVk">
@@ -63,7 +66,7 @@
       </activity>
     </config-file>
 
-    <source-file src="src/android/vksdk_library.jar" target-dir="libs/" />
+    <source-file src="src/android/vksdk_library" target-dir="./" />
     <source-file src="src/android/SocialVk.java" target-dir="src/ru/trilan/socialvk/" />
   </platform>
 
