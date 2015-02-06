@@ -5,7 +5,7 @@
     id="ru.trilan.cordova-social-vk"
     version="1.0.0">
 
-  <name>GPlus</name>
+  <name>SocialVk</name>
   <description>Cordova plugin for VKontakte sharing</description>
   <engines>
     <engine name="cordova" version=">=3.0.0" />
