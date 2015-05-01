@@ -55,7 +55,7 @@
     if(![VKSdk isLoggedIn]) {
         [self vkLoginWithBlock:^(NSString *token) {
             if(token) {
-                VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{} andHttpMethod:@"GET"];
+                VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{@"fields": @"sex,bdate,city,country,screen_name,photo_50,photo_200_orig"} andHttpMethod:@"GET"];
                 [req executeWithResultBlock:^(VKResponse *response) {
                     NSLog(@"User response %@", response);
                     
