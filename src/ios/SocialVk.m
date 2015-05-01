@@ -50,6 +50,36 @@
     BOOL wasHandled = [VKSdk processOpenURL:url fromApplication:nil];
 }
 
+-(void) login:(CDVInvokedUrlCommand *)command
+{
+    if(![VKSdk isLoggedIn]) {
+        [self vkLoginWithBlock:^(NSString *token) {
+            if(token) {
+                VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{} andHttpMethod:@"GET"];
+                [req executeWithResultBlock:^(VKResponse *response) {
+                    NSLog(@"User response %@", response);
+                    
+                    CDVPluginResult* pluginResult = nil;
+                    NSMutableDictionary *data = [NSMutableDictionary new];
+                    data[@"token"] = token;
+                    if([response.json isKindOfClass:NSArray.class] && [(NSArray*)response.json count]>0 )
+                        data[@"user"] = [response.json objectAtIndex:0];
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:data];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                } errorBlock:^(NSError *error) {
+                    NSLog(@"Cant load user details");
+                    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                }];
+            } else {
+                NSLog(@"Cant login to VKontakte");
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            }
+        }];
+    }
+}
+
 -(void) share:(CDVInvokedUrlCommand*)command {
     NSBundle *vkb = [VKBundle vkLibraryResourcesBundle];
     NSLog(@"VK Bundle path %@", vkb.bundlePath);
@@ -61,7 +91,7 @@
     //NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
 
     if(![VKSdk isLoggedIn]) {
-        [self odnoklassnikiLoginWithBlock:^(NSString *token) {
+        [self vkLoginWithBlock:^(NSString *token) {
             CDVPluginResult* pluginResult = nil;
             if(token) {
                 VKShareDialogController *sh = [VKShareDialogController new];
@@ -92,10 +122,10 @@
     }
 }
 
--(void)odnoklassnikiLoginWithBlock:(void (^)(NSString *))block
+-(void)vkLoginWithBlock:(void (^)(NSString *))block
 {
     vkCallBackBlock = [block copy];
-    [VKSdk authorize:@[VK_PER_WALL] revokeAccess:NO forceOAuth:YES inApp:YES display:VK_DISPLAY_IOS];
+    [VKSdk authorize:@[VK_PER_WALL, VK_PER_OFFLINE] revokeAccess:NO forceOAuth:YES inApp:YES display:VK_DISPLAY_IOS];
 }
 
 
