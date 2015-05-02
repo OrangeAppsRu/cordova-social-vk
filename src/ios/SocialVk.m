@@ -8,6 +8,7 @@
     CDVInvokedUrlCommand *savedCommand;
     void (^vkCallBackBlock)(NSString *);
     BOOL inited;
+    NSMutableDictionary *loginDetails;
 }
 
 @synthesize clientId;
@@ -60,11 +61,11 @@
                     NSLog(@"User response %@", response);
                     
                     CDVPluginResult* pluginResult = nil;
-                    NSMutableDictionary *data = [NSMutableDictionary new];
-                    data[@"token"] = token;
+                    loginDetails = [NSMutableDictionary new];
+                    loginDetails[@"token"] = token;
                     if([response.json isKindOfClass:NSArray.class] && [(NSArray*)response.json count]>0 )
-                        data[@"user"] = [response.json objectAtIndex:0];
-                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:data];
+                        loginDetails[@"user"] = [response.json objectAtIndex:0];
+                    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:loginDetails];
                     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                 } errorBlock:^(NSError *error) {
                     NSLog(@"Cant load user details");
@@ -77,6 +78,28 @@
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }
         }];
+    } else {
+        if(loginDetails) {
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:loginDetails];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        } else {
+            VKAccessToken *token = [VKSdk getAccessToken];
+            VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{@"fields": @"sex,bdate,city,country,screen_name,photo_50,photo_200_orig"} andHttpMethod:@"GET"];
+            [req executeWithResultBlock:^(VKResponse *response) {
+                NSLog(@"User response %@", response);
+                CDVPluginResult* pluginResult = nil;
+                loginDetails = [NSMutableDictionary new];
+                loginDetails[@"token"] = token.accessToken;
+                if([response.json isKindOfClass:NSArray.class] && [(NSArray*)response.json count]>0 )
+                    loginDetails[@"user"] = [response.json objectAtIndex:0];
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:loginDetails];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            } errorBlock:^(NSError *error) {
+                NSLog(@"Cant load user details");
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+                [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            }];
+        }
     }
 }
 
@@ -128,11 +151,29 @@
     [VKSdk authorize:@[VK_PER_WALL, VK_PER_OFFLINE] revokeAccess:NO forceOAuth:YES inApp:YES display:VK_DISPLAY_IOS];
 }
 
+-(void)logout:(CDVInvokedUrlCommand *)command
+{
+    [VKSdk forceLogout];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+#pragma mark - VKSdkDelegate
 
 -(void) vkSdkReceivedNewToken:(VKAccessToken*) newToken
 {
     NSLog(@"VK Token %@", newToken.accessToken);
     if(vkCallBackBlock) vkCallBackBlock(newToken.accessToken);
+}
+
+- (void)vkSdkAcceptedUserToken:(VKAccessToken *)token
+{
+    NSLog(@"VK Token %@", token.accessToken);
+}
+
+- (void)vkSdkRenewedToken:(VKAccessToken *)newToken
+{
+    NSLog(@"VK Token %@", newToken.accessToken);
 }
 
 -(void) vkSdkUserDeniedAccess:(VKError*) authorizationError

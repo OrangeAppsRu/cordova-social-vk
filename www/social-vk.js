@@ -12,5 +12,10 @@ SocialVk.prototype.login = function(successCallback, errorCallback) {
 SocialVk.prototype.share = function(sourceURL, description, imageURL, successCallback, errorCallback) {
     cordova.exec(successCallback, errorCallback, "SocialVk", "share", [sourceURL, description, imageURL]);
 };
+
+SocialVk.prototype.logout = function(successCallback, errorCallback) {
+    cordova.exec(successCallback, errorCallback, "SocialVk", "logout");
+};
+
 module.exports = new SocialVk();
 
