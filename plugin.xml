@@ -65,8 +65,11 @@
       <activity android:name="com.vk.sdk.VKOpenAuthActivity" >
       </activity>
     </config-file>
+    <config-file target="project.properties" parent="/*">
+      android.library.reference.2=vksdk_library
+    </config-file>
 
-    <source-file src="src/android/vksdk_library" target-dir="./" />
+    <framework src="src/android/vksdk_library" custom="true" />
     <source-file src="src/android/SocialVk.java" target-dir="src/ru/trilan/socialvk/" />
   </platform>
 
