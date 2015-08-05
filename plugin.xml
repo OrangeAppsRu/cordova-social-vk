@@ -52,9 +52,9 @@
 
   <!-- android -->
   <platform name="android">
-    <info>
+    <!--info>
       You should add 'android.library.reference.2=vksdk_library' to project.properties
-    </info>
+    </info-->
     <!-- Cordova 2.5+ -->
     <config-file target="config.xml" parent="/*">
       <feature name="SocialVk">
@@ -64,9 +64,6 @@
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <activity android:name="com.vk.sdk.VKOpenAuthActivity" >
       </activity>
-    </config-file>
-    <config-file target="project.properties" parent="/*">
-      android.library.reference.2=vksdk_library
     </config-file>
 
     <framework src="src/android/vksdk_library" custom="true" />
