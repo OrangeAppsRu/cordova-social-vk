@@ -1,0 +1,10 @@
+dependencies {
+    compile 'com.android.support:support-v4:22.2.0'
+}
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
