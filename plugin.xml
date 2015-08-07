@@ -31,7 +31,7 @@
 
     <header-file src="src/ios/SocialVk.h"/>
     <source-file src="src/ios/SocialVk.m" />
-    <framework src="src/ios/VKontakte.framework" custom="true"/>
+    <framework src="src/ios/VKSdk.framework" custom="true"/>
     <resource-file src="src/ios/VKSdkResources.bundle" />
 
     <config-file target="*-Info.plist" parent="CFBundleURLTypes">

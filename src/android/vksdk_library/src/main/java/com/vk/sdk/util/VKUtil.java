@@ -28,6 +28,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.vk.sdk.VKSdk;
@@ -57,9 +58,13 @@ public class VKUtil {
      * @param queryString string to explode
      * @return Key-value map of passed string
      */
-    public static Map<String, String> explodeQueryString(String queryString) {
+    @Nullable
+    public static Map<String, String> explodeQueryString(@Nullable String queryString) {
+        if (queryString == null) {
+            return null;
+        }
         String[] keyValuePairs = queryString.split("&");
-        HashMap<String, String> parameters = new HashMap<String, String>(keyValuePairs.length);
+        HashMap<String, String> parameters = new HashMap<>(keyValuePairs.length);
 
         for (String keyValueString : keyValuePairs) {
             String[] keyValueArray = keyValueString.split("=");
@@ -180,7 +185,7 @@ public class VKUtil {
             if (VKSdk.DEBUG)
                 Log.w("VKUtil", "Params must be paired. Last one is ignored");
         }
-        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>(args.length / 2);
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>(args.length / 2);
         for (int i = 0; i + 1 < args.length; i += 2) {
             if (args[i] == null || args[i + 1] == null || !(args[i] instanceof String)) {
                 if (VKSdk.DEBUG)

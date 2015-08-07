@@ -21,16 +21,23 @@
 
 package com.vk.sdk.dialogs;
 
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.app.DialogFragment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +72,6 @@ import com.vk.sdk.api.photo.VKUploadWallPhotoRequest;
 import com.vk.sdk.util.VKStringJoiner;
 import com.vk.sdk.util.VKUtil;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -75,52 +81,53 @@ import java.util.ArrayList;
  * Example usage:
  * <pre>
  * {@code VKPhotoArray photos = new VKPhotoArray();
-    photos.add(new VKApiPhoto("photo-47200925_314622346"));
-    new VKShareDialog()
-        .setText("I created this post with VK Android SDK\nSee additional information below\n#vksdk")
-        .setUploadedPhotos(photos)
-        .setAttachmentImages(new VKUploadImage[]{
-            new VKUploadImage(myBitmap, VKImageParameters.pngImage())
-        })
-        .setAttachmentLink("VK Android SDK information", "https://vk.com/dev/android_sdk")
-        .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
-            public void onVkShareComplete(int postId) {
-
-            }
-            public void onVkShareCancel() {
-
-            }
-        })
-        .show(getFragmentManager(), "VK_SHARE_DIALOG");
- }
+ * photos.add(new VKApiPhoto("photo-47200925_314622346"));
+ * new VKShareDialog()
+ * .setText("I created this post with VK Android SDK\nSee additional information below\n#vksdk")
+ * .setUploadedPhotos(photos)
+ * .setAttachmentImages(new VKUploadImage[]{
+ * new VKUploadImage(myBitmap, VKImageParameters.pngImage())
+ * })
+ * .setAttachmentLink("VK Android SDK information", "https://vk.com/dev/android_sdk")
+ * .setShareDialogListener(new VKShareDialog.VKShareDialogListener() {
+ * public void onVkShareComplete(int postId) {
+ *
+ * }
+ * public void onVkShareCancel() {
+ *
+ * }
+ * })
+ * .show(getFragmentManager(), "VK_SHARE_DIALOG");
+ * }
  * </pre>
  */
 public class VKShareDialog extends DialogFragment {
-    static private final String SHARE_TEXT_KEY      = "ShareText";
-    static private final String SHARE_LINK_KEY      = "ShareLink";
-    static private final String SHARE_IMAGES_KEY    = "ShareImages";
-    static private final String SHARE_UPLOADED_IMAGES_KEY    = "ShareUploadedImages";
+    static private final String SHARE_TEXT_KEY = "ShareText";
+    static private final String SHARE_LINK_KEY = "ShareLink";
+    static private final String SHARE_IMAGES_KEY = "ShareImages";
+    static private final String SHARE_UPLOADED_IMAGES_KEY = "ShareUploadedImages";
 
-    static private final int SHARE_PHOTO_HEIGHT         = 100;
-    static private final int SHARE_PHOTO_CORNER_RADIUS  = 3;
-    static private final int SHARE_PHOTO_MARGIN_LEFT    = 10;
+    static private final int SHARE_PHOTO_HEIGHT = 100;
+    static private final int SHARE_PHOTO_CORNER_RADIUS = 3;
+    static private final int SHARE_PHOTO_MARGIN_LEFT = 10;
 
-    private EditText     mShareTextField;
-    private Button       mSendButton;
-    private ProgressBar  mSendProgress;
+    private EditText mShareTextField;
+    private Button mSendButton;
+    private ProgressBar mSendProgress;
     private LinearLayout mPhotoLayout;
     private HorizontalScrollView mPhotoScroll;
 
-    private UploadingLink   mAttachmentLink;
+    private UploadingLink mAttachmentLink;
     private VKUploadImage[] mAttachmentImages;
-    private VKPhotoArray    mExistingPhotos;
-    private CharSequence    mAttachmentText;
+    private VKPhotoArray mExistingPhotos;
+    private CharSequence mAttachmentText;
 
     private VKShareDialogListener mListener;
 
 
     /**
      * Sets images that will be uploaded with post
+     *
      * @param images array of VKUploadImage objects with image data and upload parameters
      * @return Returns this dialog for chaining
      */
@@ -131,6 +138,7 @@ public class VKShareDialog extends DialogFragment {
 
     /**
      * Sets this dialog post text. User can change that text
+     *
      * @param textToPost Text for post
      * @return Returns this dialog for chaining
      */
@@ -141,8 +149,9 @@ public class VKShareDialog extends DialogFragment {
 
     /**
      * Sets dialog link with link name
+     *
      * @param linkTitle A small description for your link
-     * @param linkUrl Url that link follows
+     * @param linkUrl   Url that link follows
      * @return Returns this dialog for chaining
      */
     public VKShareDialog setAttachmentLink(String linkTitle, String linkUrl) {
@@ -152,6 +161,7 @@ public class VKShareDialog extends DialogFragment {
 
     /**
      * Sets array of already uploaded photos from VK, that will be attached to post
+     *
      * @param photos Prepared array of {@link VKApiPhoto} objects
      * @return Returns this dialog for chaining
      */
@@ -162,6 +172,7 @@ public class VKShareDialog extends DialogFragment {
 
     /**
      * Sets this dialog listener
+     *
      * @param listener {@link VKShareDialogListener} object
      * @return Returns this dialog for chaining
      */
@@ -170,18 +181,19 @@ public class VKShareDialog extends DialogFragment {
         return this;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getActivity();
-        View mInternalView = LayoutInflater.from(context).inflate(R.layout.vk_share_dialog, null);
+        View mInternalView = View.inflate(context, R.layout.vk_share_dialog, null);
 
         assert mInternalView != null;
 
-        mSendButton             = (Button) mInternalView.findViewById(R.id.sendButton);
-        mSendProgress           = (ProgressBar) mInternalView.findViewById(R.id.sendProgress);
-        mPhotoLayout            = (LinearLayout) mInternalView.findViewById(R.id.imagesContainer);
-        mShareTextField         = (EditText) mInternalView.findViewById(R.id.shareText);
-        mPhotoScroll            = (HorizontalScrollView) mInternalView.findViewById(R.id.imagesScrollView);
+        mSendButton = (Button) mInternalView.findViewById(R.id.sendButton);
+        mSendProgress = (ProgressBar) mInternalView.findViewById(R.id.sendProgress);
+        mPhotoLayout = (LinearLayout) mInternalView.findViewById(R.id.imagesContainer);
+        mShareTextField = (EditText) mInternalView.findViewById(R.id.shareText);
+        mPhotoScroll = (HorizontalScrollView) mInternalView.findViewById(R.id.imagesScrollView);
 
         LinearLayout mAttachmentLinkLayout = (LinearLayout) mInternalView.findViewById(R.id.attachmentLinkLayout);
 
@@ -190,9 +202,9 @@ public class VKShareDialog extends DialogFragment {
         //Attachment text
         if (savedInstanceState != null) {
             mShareTextField.setText(savedInstanceState.getString(SHARE_TEXT_KEY));
-            mAttachmentLink   = savedInstanceState.getParcelable(SHARE_LINK_KEY);
+            mAttachmentLink = savedInstanceState.getParcelable(SHARE_LINK_KEY);
             mAttachmentImages = (VKUploadImage[]) savedInstanceState.getParcelableArray(SHARE_IMAGES_KEY);
-            mExistingPhotos   = savedInstanceState.getParcelable(SHARE_UPLOADED_IMAGES_KEY);
+            mExistingPhotos = savedInstanceState.getParcelable(SHARE_UPLOADED_IMAGES_KEY);
         } else if (mAttachmentText != null) {
             mShareTextField.setText(mAttachmentText);
         }
@@ -216,7 +228,7 @@ public class VKShareDialog extends DialogFragment {
         //Attachment link
         if (mAttachmentLink != null) {
             TextView linkTitle = (TextView) mAttachmentLinkLayout.findViewById(R.id.linkTitle),
-                     linkHost  = (TextView) mAttachmentLinkLayout.findViewById(R.id.linkHost);
+                    linkHost = (TextView) mAttachmentLinkLayout.findViewById(R.id.linkHost);
 
             linkTitle.setText(mAttachmentLink.linkTitle);
             linkHost.setText(VKUtil.getHost(mAttachmentLink.linkUrl));
@@ -228,16 +240,40 @@ public class VKShareDialog extends DialogFragment {
         result.requestWindowFeature(Window.FEATURE_NO_TITLE);
         result.setContentView(mInternalView);
         result.setCancelable(true);
+        result.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                if (mListener != null) {
+                    mListener.onVkShareCancel();
+                }
+                VKShareDialog.this.dismiss();
+            }
+        });
+
+
         return result;
     }
 
+
     @Override
+    @SuppressLint("NewApi")
     public void onStart() {
         super.onStart();
+
+        int width = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        if (Build.VERSION.SDK_INT >= 13) {
+            WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            width = size.x - getResources().getDimensionPixelSize(R.dimen.vk_share_dialog_view_padding) * 2;
+        }
+
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(getDialog().getWindow().getAttributes());
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.width  = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = width;
         getDialog().getWindow().setAttributes(lp);
     }
 
@@ -266,14 +302,14 @@ public class VKShareDialog extends DialogFragment {
             mPhotoLayout.setEnabled(true);
         }
     }
+
     private void processExistingPhotos() {
-        ArrayList<String> photosToLoad = new ArrayList<String>(mExistingPhotos.size());
+        ArrayList<String> photosToLoad = new ArrayList<>(mExistingPhotos.size());
         for (VKApiPhoto photo : mExistingPhotos) {
             photosToLoad.add("" + photo.owner_id + '_' + photo.id);
         }
         VKRequest photosById = new VKRequest("photos.getById",
-                VKParameters.from(VKApiConst.PHOTO_SIZES, 1, VKApiConst.PHOTOS, VKStringJoiner.join(photosToLoad, ",")),
-                VKRequest.HttpMethod.GET, VKPhotoArray.class);
+                VKParameters.from(VKApiConst.PHOTO_SIZES, 1, VKApiConst.PHOTOS, VKStringJoiner.join(photosToLoad, ",")), VKPhotoArray.class);
         photosById.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -298,19 +334,41 @@ public class VKShareDialog extends DialogFragment {
             }
         });
     }
-    private void loadAndAddPhoto(String photoUrl) {
+
+    private void loadAndAddPhoto(final String photoUrl) {
+        loadAndAddPhoto(photoUrl, 0);
+    }
+
+    private void loadAndAddPhoto(final String photoUrl, final int attempt) {
+        if (attempt > 10) return;
         VKImageOperation op = new VKImageOperation(photoUrl);
         op.setImageOperationListener(new VKImageOperation.VKImageOperationListener() {
             @Override
             public void onComplete(VKImageOperation operation, Bitmap image) {
+                if (image == null) {
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadAndAddPhoto(photoUrl, attempt + 1);
+                        }
+                    }, 1000);
+                    return;
+                }
                 addBitmapToPreview(image);
+            }
+
+            @Override
+            public void onError(VKImageOperation operation, VKError error) {
+                // todo method body
             }
         });
         VKHttpClient.enqueueOperation(op);
     }
+
     private void addBitmapToPreview(Bitmap sourceBitmap) {
         if (getActivity() == null) return;
         Bitmap b = VKUIHelper.getRoundedCornerBitmap(sourceBitmap, SHARE_PHOTO_HEIGHT, SHARE_PHOTO_CORNER_RADIUS);
+        if (b == null) return;
         ImageView iv = new ImageView(getActivity());
         iv.setImageBitmap(b);
         iv.setAdjustViewBounds(true);
@@ -322,6 +380,7 @@ public class VKShareDialog extends DialogFragment {
         mPhotoLayout.invalidate();
         mPhotoScroll.invalidate();
     }
+
     private void makePostWithAttachments(VKAttachments attachments) {
 
         if (attachments == null) {
@@ -359,7 +418,7 @@ public class VKShareDialog extends DialogFragment {
         @Override
         public void onClick(View view) {
             setIsLoading(true);
-            if (mAttachmentImages != null) {
+            if (mAttachmentImages != null && VKSdk.getAccessToken() != null) {
                 final Long userId = Long.parseLong(VKSdk.getAccessToken().userId);
                 VKUploadWallPhotoRequest photoRequest = new VKUploadWallPhotoRequest(mAttachmentImages, userId, 0);
                 photoRequest.executeWithListener(new VKRequest.VKRequestListener() {
@@ -372,7 +431,6 @@ public class VKShareDialog extends DialogFragment {
 
                     @Override
                     public void onError(VKError error) {
-                        Log.e(VKSdk.SDK_TAG, "Attach upload error "+error);
                         setIsLoading(false);
                     }
                 });
@@ -392,6 +450,7 @@ public class VKShareDialog extends DialogFragment {
 
     static private class UploadingLink implements Parcelable {
         public String linkTitle, linkUrl;
+
         public UploadingLink(String title, String url) {
             linkTitle = title;
             linkUrl = url;
@@ -424,8 +483,9 @@ public class VKShareDialog extends DialogFragment {
         };
     }
 
-    public static interface VKShareDialogListener {
-        public void onVkShareComplete(int postId);
-        public void onVkShareCancel();
+    public interface VKShareDialogListener {
+        void onVkShareComplete(int postId);
+
+        void onVkShareCancel();
     }
 }

@@ -31,41 +31,28 @@ import java.util.Locale;
 /**
  * Basic class for all API-requests builders (parts)
  */
-class VKApiBase {
+public abstract class VKApiBase {
     /**
      * Selected methods group
      */
-    private String mMethodGroup;
 
-    VKApiBase() {
-        String className = this.getClass().getSimpleName();
-        if (className == null) {
-            throw new ClassCastException("Enclosing classes denied");
-        }
-        mMethodGroup = className.substring("VKApi".length()).toLowerCase();
+    protected abstract String getMethodsGroup();
+
+    protected VKRequest prepareRequest(String methodName, VKParameters methodParameters) {
+        return new VKRequest(String.format(Locale.US, "%s.%s", getMethodsGroup(), methodName), methodParameters, null);
     }
 
-    VKRequest prepareRequest(String methodName, VKParameters methodParameters) {
-        return prepareRequest(methodName, methodParameters, VKRequest.HttpMethod.GET);
+    protected VKRequest prepareRequest(String methodName, VKParameters methodParameters,
+                                       Class<? extends VKApiModel> modelClass) {
+        return new VKRequest(String.format(Locale.US, "%s.%s", getMethodsGroup(), methodName), methodParameters, modelClass);
     }
 
-    VKRequest prepareRequest(String methodName, VKParameters methodParameters,
-                             VKRequest.HttpMethod httpMethod) {
-        return prepareRequest(methodName, methodParameters, httpMethod, (VKParser)null);
-    }
-
-    VKRequest prepareRequest(String methodName, VKParameters methodParameters,
-                             VKRequest.HttpMethod httpMethod,
-                             Class<? extends VKApiModel> modelClass) {
-        return new VKRequest(String.format(Locale.US, "%s.%s", mMethodGroup, methodName),
-                methodParameters, httpMethod, modelClass);
-    }
-    VKRequest prepareRequest(String methodName, VKParameters methodParameters,
-                             VKRequest.HttpMethod httpMethod,
-                             VKParser responseParser) {
-        VKRequest result = new VKRequest(String.format(Locale.US, "%s.%s", mMethodGroup, methodName),
-                methodParameters, httpMethod);
+    protected VKRequest prepareRequest(String methodName, VKParameters methodParameters,
+                                       VKParser responseParser) {
+        VKRequest result = new VKRequest(String.format(Locale.US, "%s.%s", getMethodsGroup(), methodName), methodParameters);
         result.setResponseParser(responseParser);
         return result;
     }
+
+
 }

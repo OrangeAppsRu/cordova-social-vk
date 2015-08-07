@@ -39,7 +39,11 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.util.VKUtil;
+
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Activity for request OAuth authorization in case of missing VK app.
@@ -53,9 +57,10 @@ public class VKOpenAuthActivity extends Activity {
     public static final String VK_RESULT_INTENT_NAME = "com.vk.auth-token";
     public static final String VK_EXTRA_TOKEN_DATA = "extra-token-data";
 	public static final String VK_EXTRA_VALIDATION_URL = "extra-validation-url";
-    public static final String VK_EXTRA_VALIDATION_REQUEST = "extra-validation-reques";
+    public static final String VK_EXTRA_VALIDATION_REQUEST = "extra-validation-request";
 
     private static final String REDIRECT_URL = "https://oauth.vk.com/blank.html";
+    private static final String ERROR = "error";
 
     protected WebView mWebView;
 
@@ -112,17 +117,33 @@ public class VKOpenAuthActivity extends Activity {
         }
     }
 
+    public static Intent validationIntent(VKError validationError) {
+        Intent i = new Intent(VKUIHelper.getApplicationContext(), VKOpenAuthActivity.class);
+        i.putExtra(VKOpenAuthActivity.VK_EXTRA_VALIDATION_URL, validationError.redirectUri);
+        i.putExtra(VKOpenAuthActivity.VK_EXTRA_VALIDATION_REQUEST, validationError.request.registerObject());
+        return i;
+    }
+
     private class OAuthWebViewClient extends WebViewClient {
         public boolean canShowPage = true;
         private boolean processUrl(String url) {
             if (url.startsWith(REDIRECT_URL)) {
                 Intent data = new Intent(VK_RESULT_INTENT_NAME);
-                data.putExtra(VK_EXTRA_TOKEN_DATA, url.substring(url.indexOf('#') + 1));
-                if (getIntent().hasExtra(VK_EXTRA_VALIDATION_URL))
+                String extraData = url.substring(url.indexOf('#') + 1);
+                data.putExtra(VK_EXTRA_TOKEN_DATA, extraData);
+                Map<String, String> resultParams = VKUtil.explodeQueryString(extraData);
+
+                if (getIntent().hasExtra(VK_EXTRA_VALIDATION_URL)) {
                     data.putExtra(VK_EXTRA_VALIDATION_URL, true);
-                if (getIntent().hasExtra(VK_EXTRA_VALIDATION_REQUEST))
-                    data.putExtra(VK_EXTRA_VALIDATION_REQUEST, getIntent().getLongExtra(VK_EXTRA_VALIDATION_REQUEST,0));
-                setResult(RESULT_OK, data);
+                }
+                if (getIntent().hasExtra(VK_EXTRA_VALIDATION_REQUEST)) {
+                    data.putExtra(VK_EXTRA_VALIDATION_REQUEST, getIntent().getLongExtra(VK_EXTRA_VALIDATION_REQUEST, 0));
+                }
+                if (resultParams != null && resultParams.containsKey(ERROR)) {
+                    setResult(RESULT_CANCELED, data);
+                } else {
+                    setResult(RESULT_OK, data);
+                }
                 finish();
                 return true;
             }

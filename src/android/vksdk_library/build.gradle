@@ -3,12 +3,12 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 19
+        targetSdkVersion 22
     }
 }
 
@@ -18,23 +18,10 @@ configurations {
 }
 
 dependencies {
-    javadoc 'org.apache.httpcomponents:httpclient:4.0.1'
+    javadoc 'org.apache.httpcomponents:httpclient:4.3.5'
     javadoc 'org.json:json:20080701'
     javadoc 'com.google.android:annotations:4.1.1.4@jar'
-    compile 'com.android.support:support-v4:20.0.0'
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:+'
-    }
-}
-
-repositories {
-    mavenCentral()
+    compile 'com.android.support:support-v4:22.2.0'
 }
 
 if (project.hasProperty('officialBuild')) {
@@ -92,22 +79,19 @@ if (project.hasProperty('officialBuild')) {
         }
     }
 
-    task javadoc(type: Javadoc) {
-        source = android.sourceSets.main.java.sourceFiles
-        classpath = project.files(configurations.javadoc,
-                "${buildDir}/classes/release",
-                project.fileTree("${buildDir}/exploded-bundles") { include '*/classes.jar' },
-                new File((File) (android.plugin.sdkFolder), "platforms/${android.compileSdkVersion}/android.jar"))
-    }
-
-    task javadocJar(type: Jar, dependsOn: tasks.javadoc) {
-        from tasks.javadoc.destinationDir
-        classifier = 'javadoc'
-    }
-
     task sourcesJar(type: Jar) {
-        from android.sourceSets.main.java.sourceFiles
+        from android.sourceSets.main.java.srcDirs
         classifier = 'sources'
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
     }
 
     signing {
@@ -116,7 +100,7 @@ if (project.hasProperty('officialBuild')) {
     }
 
     artifacts {
-        archives tasks.javadocJar
-        archives tasks.sourcesJar
+        archives javadocJar
+        archives sourcesJar
     }
 }

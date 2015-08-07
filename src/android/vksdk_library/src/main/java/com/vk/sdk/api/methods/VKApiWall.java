@@ -21,6 +21,7 @@
 
 package com.vk.sdk.api.methods;
 
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.model.VKCommentArray;
@@ -31,18 +32,19 @@ import com.vk.sdk.api.model.VKWallPostResult;
  * Builds requests for API.wall part
  */
 public class VKApiWall extends VKApiBase {
+    public static final String EXTENDED = VKApiConst.EXTENDED;
 
     public VKRequest get(VKParameters params) {
-        if (((Integer) params.get("extended")) == 1) {
-            return prepareRequest("get", params, VKRequest.HttpMethod.GET, VKPostArray.class);
+        if (params.containsKey(EXTENDED) && (Integer) (params.get(EXTENDED)) == 1) {
+            return prepareRequest("get", params, VKPostArray.class);
         } else {
             return prepareRequest("get", params);
         }
     }
 
     public VKRequest getById(VKParameters params) {
-        if (((Integer) params.get("extended")) == 1) {
-            return prepareRequest("get", params, VKRequest.HttpMethod.GET, VKPostArray.class);
+        if (params.containsKey(EXTENDED) && ((Integer) params.get(EXTENDED)) == 1) {
+            return prepareRequest("get", params, VKPostArray.class);
         } else {
             return prepareRequest("get", params);
         }
@@ -54,7 +56,7 @@ public class VKApiWall extends VKApiBase {
 
 
     public VKRequest post(VKParameters parameters) {
-        return prepareRequest("post", parameters, VKRequest.HttpMethod.POST, VKWallPostResult.class);
+        return prepareRequest("post", parameters, VKWallPostResult.class);
     }
 
     public VKRequest repost(VKParameters params) {
@@ -78,7 +80,7 @@ public class VKApiWall extends VKApiBase {
     }
 
     public VKRequest getComments(VKParameters params) {
-        return prepareRequest("getComments", params, VKRequest.HttpMethod.GET, VKCommentArray.class);
+        return prepareRequest("getComments", params, VKCommentArray.class);
     }
 
     public VKRequest addComment(VKParameters params) {
@@ -103,5 +105,10 @@ public class VKApiWall extends VKApiBase {
 
     public VKRequest reportComment(VKParameters params) {
         return prepareRequest("reportComment", params);
+    }
+
+    @Override
+    protected String getMethodsGroup() {
+        return "wall";
     }
 }
