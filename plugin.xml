@@ -17,9 +17,9 @@
   <js-module src="www/social-vk.js" name="SocialVk">
     <clobbers target="SocialVk" />
   </js-module>
+  <preference name="VK_APP_ID" />
   <!-- ios -->
   <platform name="ios">
-    <preference name="VK_APP_ID" />
     <info>
       You need to register VKontakte application first.
     </info>
@@ -31,6 +31,8 @@
 
     <header-file src="src/ios/SocialVk.h"/>
     <source-file src="src/ios/SocialVk.m" />
+    <source-file src="src/ios/NSData+Base64.h" />
+    <source-file src="src/ios/NSData+Base64.m" />
     <framework src="src/ios/VKSdk.framework" custom="true"/>
     <resource-file src="src/ios/VKSdkResources.bundle" />
 
@@ -40,10 +42,10 @@
           <key>CFBundleTypeRole</key>
           <string>Editor</string>
           <key>CFBundleURLName</key>
-          <string>$VK_APP_ID</string>
+          <string>vk$VK_APP_ID</string>
           <key>CFBundleURLSchemes</key>
           <array>
-            <string>$VK_APP_ID</string>
+            <string>vk$VK_APP_ID</string>
           </array>
         </dict>
       </array>
@@ -64,6 +66,9 @@
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <activity android:name="com.vk.sdk.VKOpenAuthActivity" >
       </activity>
+    </config-file>
+    <config-file target="res/values/strings.xml" parent="/*">
+      <integer name="com_vk_sdk_AppId">$VK_APP_ID</integer>
     </config-file>
 
     <framework src="src/android/vksdk_library" custom="true" />
