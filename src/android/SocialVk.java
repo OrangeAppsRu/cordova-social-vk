@@ -1,6 +1,7 @@
 package ru.trilan.socialvk;
 
 import org.json.JSONException;
+import org.json.JSONArray;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
@@ -37,6 +38,7 @@ import com.vk.sdk.api.photo.VKImageParameters;
 public class SocialVk extends CordovaPlugin {
     private static final String TAG = "SocialVk";
     private static final String ACTION_INIT = "initSocialVk";
+    private static final String ACTION_LOGIN = "login";
     private static final String ACTION_SHARE = "share";
     private CallbackContext _callbackContext;
 
@@ -71,10 +73,19 @@ public class SocialVk extends CordovaPlugin {
         this._callbackContext = callbackContext;
         if(ACTION_INIT.equals(action)) {
             return init(args.getString(0));
+        } else if (ACTION_LOGIN.equals(action)) {
+            JSONArray permissions = args.getJSONArray(0);
+            String[] perms = new String[permissions.length()];
+            for(int i=0; i<permissions.length(); i++) {
+                perms[i] = permissions.getString(i);
+            }
+            return login(perms);
         } else if (ACTION_SHARE.equals(action)) {
             return shareOrLogin(args.getString(0), args.getString(1), args.getString(2));
         } else {
-            Log.i(TAG, "Unknown action: "+action);
+            Log.e(TAG, "Unknown action: "+action);
+            _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "Unimplemented method: "+action));
+            _callbackContext.error("Unimplemented method: "+action);
         }
         return true;
     }
@@ -85,8 +96,14 @@ public class SocialVk extends CordovaPlugin {
         Log.i(TAG, "VK initialize");
         VKSdk.initialize(getApplicationContext());
 
-        //_callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-        //_callbackContext.success();
+        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+        _callbackContext.success();
+        return true;
+    }
+
+    private boolean login(String[] permissions)
+    {
+        VKSdk.login(getActivity(), permissions);
         return true;
     }
 
