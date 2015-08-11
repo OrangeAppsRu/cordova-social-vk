@@ -66,6 +66,8 @@
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <activity android:name="com.vk.sdk.VKOpenAuthActivity" >
       </activity>
+      <activity android:name="com.vk.sdk.VKServiceActivity" >
+      </activity>
     </config-file>
     <config-file target="res/values/strings.xml" parent="/*">
       <integer name="com_vk_sdk_AppId">$VK_APP_ID</integer>
