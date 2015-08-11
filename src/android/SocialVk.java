@@ -2,6 +2,7 @@ package ru.trilan.socialvk;
 
 import org.json.JSONException;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaArgs;
@@ -28,18 +29,39 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKScope;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKRequest.VKRequestListener;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
 import com.vk.sdk.dialogs.VKShareDialog;
-import com.vk.sdk.VKScope;
 import com.vk.sdk.api.photo.VKUploadImage;
 import com.vk.sdk.api.photo.VKImageParameters;
+import com.vk.sdk.util.VKJsonHelper;
 
 public class SocialVk extends CordovaPlugin {
     private static final String TAG = "SocialVk";
     private static final String ACTION_INIT = "initSocialVk";
     private static final String ACTION_LOGIN = "login";
     private static final String ACTION_SHARE = "share";
+    private static final String ACTION_USERS_GET = "users_get";
+    private static final String ACTION_USERS_SEARCH = "users_search";
+    private static final String ACTION_USERS_IS_APP_USER = "users_isAppUser";
+    private static final String ACTION_USERS_GET_SUBSCRIPTIONS = "users_getSubscriptions";
+    private static final String ACTION_USERS_GET_FOLLOWERS = "users_getFollowers";
+    private static final String ACTION_WALL_POST = "wall_post";
+    private static final String ACTION_PHOTOS_GET_UPLOAD_SERVER = "photos_getUploadServer";
+    private static final String ACTION_PHOTOS_GET_WALL_UPLOAD_SERVER = "photos_getWallUploadServer";
+    private static final String ACTION_PHOTOS_SAVE_WALL_PHOTO = "photos_saveWallPhoto";
+    private static final String ACTION_PHOTOS_SAVE = "photos_save";
+    private static final String ACTION_FRIENDS_GET = "friends_get";
+    private static final String ACTION_FRIENDS_GET_ONLINE = "friends_getOnline";
+    private static final String ACTION_FRIENDS_GET_MUTUAL = "friends_getMutual";
+    private static final String ACTION_FRIENDS_GET_RECENT = "friends_getRecent";
+    private static final String ACTION_FRIENDS_GET_REQUESTS = "friends_getRequests";
+    private static final String ACTION_CALL_API_METHOD = "callApiMethod";
     private CallbackContext _callbackContext;
 
     private String savedUrl = null;
@@ -82,11 +104,29 @@ public class SocialVk extends CordovaPlugin {
             return login(perms);
         } else if (ACTION_SHARE.equals(action)) {
             return shareOrLogin(args.getString(0), args.getString(1), args.getString(2));
-        } else {
-            Log.e(TAG, "Unknown action: "+action);
-            _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "Unimplemented method: "+action));
-            _callbackContext.error("Unimplemented method: "+action);
+        } else if (ACTION_USERS_GET.equals(action)) {
+        } else if (ACTION_USERS_SEARCH.equals(action)) {
+        } else if (ACTION_USERS_IS_APP_USER.equals(action)) {
+        } else if (ACTION_USERS_GET_SUBSCRIPTIONS.equals(action)) {
+        } else if (ACTION_USERS_GET_FOLLOWERS.equals(action)) {
+        } else if (ACTION_WALL_POST.equals(action)) {
+        } else if (ACTION_PHOTOS_GET_UPLOAD_SERVER.equals(action)) {
+        } else if (ACTION_PHOTOS_GET_WALL_UPLOAD_SERVER.equals(action)) {
+        } else if (ACTION_PHOTOS_SAVE_WALL_PHOTO.equals(action)) {
+        } else if (ACTION_PHOTOS_SAVE.equals(action)) {
+        } else if (ACTION_FRIENDS_GET.equals(action)) {
+        } else if (ACTION_FRIENDS_GET_ONLINE.equals(action)) {
+        } else if (ACTION_FRIENDS_GET_MUTUAL.equals(action)) {
+        } else if (ACTION_FRIENDS_GET_RECENT.equals(action)) {
+        } else if (ACTION_FRIENDS_GET_REQUESTS.equals(action)) {
+        } else if (ACTION_CALL_API_METHOD.equals(action)) {
+            String method = args.getString(0);
+            JSONObject params = args.getJSONObject(1);
+            return callApiMethod(method, params, callbackContext);
         }
+        Log.e(TAG, "Unknown action: "+action);
+        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, "Unimplemented method: "+action));
+        _callbackContext.error("Unimplemented method: "+action);
         return true;
     }
 
@@ -204,5 +244,42 @@ public class SocialVk extends CordovaPlugin {
             Log.e(TAG, "Can't fetch image from url "+src+": "+e);
             return null;
         }
+    }
+
+    private boolean callApiMethod(String method, JSONObject params, CallbackContext context) {
+        try {
+            VKRequest req = new VKRequest(method, new VKParameters(VKJsonHelper.toMap(params)));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private void performRequest(VKRequest request, final CallbackContext context) {
+        request.executeWithListener(new VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    context.sendPluginResult(new PluginResult(PluginResult.Status.OK, response.responseString));
+                    context.success();
+                }
+                @Override
+                public void onError(VKError error) {
+                    Log.e(TAG, error.errorMessage + error.errorReason);
+                    context.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error.errorMessage));
+                    context.error(error.errorMessage);
+                }
+                @Override
+                public void onProgress(VKRequest.VKProgressType progressType,
+                                       long bytesLoaded,
+                                       long bytesTotal)
+                {
+                    //I don't really believe in progress
+                }
+                @Override
+                public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                    //More luck next time
+                }
+            });
     }
 }
