@@ -118,7 +118,17 @@ public class SocialVk extends CordovaPlugin {
         } else if (ACTION_FRIENDS_GET_ONLINE.equals(action)) {
         } else if (ACTION_FRIENDS_GET_MUTUAL.equals(action)) {
         } else if (ACTION_FRIENDS_GET_RECENT.equals(action)) {
+            int count = args.getInt(0);
+            return friends_getRecent(count, callbackContext);
         } else if (ACTION_FRIENDS_GET_REQUESTS.equals(action)) {
+            int offset = args.getInt(0);
+            int count = args.getInt(1);
+            int extended = args.getInt(2);
+            int needs_mutual = args.getInt(3);
+            int out = args.getInt(4);
+            int sort = args.getInt(5);
+            int suggested = args.getInt(6);
+            return friends_getRequests(offset, count, extended, needs_mutual, out, sort, suggested, callbackContext);
         } else if (ACTION_CALL_API_METHOD.equals(action)) {
             String method = args.getString(0);
             JSONObject params = args.getJSONObject(1);
@@ -243,6 +253,36 @@ public class SocialVk extends CordovaPlugin {
             // Log exception
             Log.e(TAG, "Can't fetch image from url "+src+": "+e);
             return null;
+        }
+    }
+
+    private boolean friends_getRecent(int count, CallbackContext context) {
+        try {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("count", count);
+            VKRequest req = new VKRequest("friends.getRequests", new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean friends_getRequests(int offset, int count, int extended, int needs_mutual, int out, int sort, int suggested, CallbackContext context) {
+        try {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("offset", offset);
+            params.put("count", count);
+            params.put("extended", extended);
+            params.put("needs_mutual", needs_mutual);
+            params.put("out", out);
+            params.put("sort", sort);
+            params.put("suggested", suggested);
+            VKRequest req = new VKRequest("friends.getRequests", new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
         }
     }
 
