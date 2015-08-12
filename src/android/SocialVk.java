@@ -296,10 +296,32 @@ public class SocialVk extends CordovaPlugin {
                     @Override
                     public void onResult(VKAccessToken res) {
                         // User passed Authorization
-                        Log.i(TAG, "VK new token: "+res.accessToken);
+                        final String token = res.accessToken;
+                        Log.i(TAG, "VK new token: "+token);
                         res.saveTokenToSharedPreferences(getApplicationContext(), sTokenKey);
-                        success();
-                        share(savedUrl, savedComment, savedImageUrl);
+                        VKRequest request = VKApi.users().get();
+                        request.executeWithListener(new VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    try {
+                                        JSONObject loginDetails = new JSONObject();
+                                        loginDetails.put("token", token);
+                                        loginDetails.put("user", response.json.getJSONArray("response"));
+                                        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, loginDetails.toString()));
+                                        _callbackContext.success();
+                                    } catch (JSONException exception) {
+                                        Log.e(TAG, "JSON error:", exception);
+                                        fail();
+                                    }
+                                }
+                                @Override
+                                public void onError(VKError error) {
+                                    Log.e(TAG, error.errorMessage + error.errorReason);
+                                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error.errorMessage));
+                                    _callbackContext.error(error.errorMessage);
+                                }
+                            });
+                        //share(savedUrl, savedComment, savedImageUrl);
                     }
 
                     @Override
@@ -525,8 +547,23 @@ public class SocialVk extends CordovaPlugin {
         request.executeWithListener(new VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
-                    context.sendPluginResult(new PluginResult(PluginResult.Status.OK, response.responseString));
-                    context.success();
+                    try {
+                        String result;
+                        JSONObject o = response.json;
+                        result = o.get("response").toString();
+                        /*
+                          if(o.optString("response")) result = o.getString("response");
+                          else if(o.optInt("response")) result = o.getInt("response").toString();
+                          else if(o.optJSONObject("response")) result = o.getJSONObject("response").toString();
+                          else if(o.optJSONArray("response")) result = o.getJSONArray("response").toString();
+                        */
+                        context.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
+                        context.success();
+                    } catch (JSONException e) {
+                        Log.e(TAG, "JSON exception:", e);
+                        context.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+                        context.error("Error");
+                    }
                 }
                 @Override
                 public void onError(VKError error) {
