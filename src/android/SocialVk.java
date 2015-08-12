@@ -18,6 +18,7 @@ import android.util.Log;
 import android.os.AsyncTask;
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKRequest.VKRequestListener;
@@ -105,18 +107,93 @@ public class SocialVk extends CordovaPlugin {
         } else if (ACTION_SHARE.equals(action)) {
             return shareOrLogin(args.getString(0), args.getString(1), args.getString(2));
         } else if (ACTION_USERS_GET.equals(action)) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("user_ids", args.getString(0));
+            params.put("fields", args.getString(1));
+            params.put("name_case", args.getString(2));
+            return usersGet(params, callbackContext);
         } else if (ACTION_USERS_SEARCH.equals(action)) {
+            String q = args.optString(0);
+            JSONObject params = args.optJSONObject(0);
+            if(q != null) {
+                HashMap<String, Object> paramsMap = new HashMap<String, Object>();
+                paramsMap.put("q", q);
+                return usersSearch(paramsMap, callbackContext);
+            } else if(params != null) {
+                return usersSearch(VKJsonHelper.toMap(params), callbackContext);
+            } else {
+                fail();
+                return false;
+            }
         } else if (ACTION_USERS_IS_APP_USER.equals(action)) {
+            return usersIsAppUser(args.getInt(0), callbackContext);
         } else if (ACTION_USERS_GET_SUBSCRIPTIONS.equals(action)) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("user_id", args.getInt(0));
+            params.put("extended", args.getInt(1));
+            params.put("offset", args.getInt(2));
+            params.put("count", args.getInt(3));
+            params.put("fields", args.getString(4));
+            return usersGetSubscriptions(params, callbackContext);
         } else if (ACTION_USERS_GET_FOLLOWERS.equals(action)) {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("user_id", args.getInt(0));
+            params.put("offset", args.getInt(1));
+            params.put("count", args.getInt(2));
+            params.put("fields", args.getString(3));
+            params.put("name_case", args.getString(4));
+            return usersGetFollowers(params, callbackContext);
         } else if (ACTION_WALL_POST.equals(action)) {
+            String message = args.optString(0);
+            JSONObject params = args.optJSONObject(0);
+            if(message != null) {
+                HashMap<String, Object> paramsMap = new HashMap<String, Object>();
+                paramsMap.put("message", message);
+                return wallPost(paramsMap, callbackContext);
+            } else if (params != null) {
+                return wallPost(VKJsonHelper.toMap(params), callbackContext);
+            } else {
+                fail();
+                return false;
+            }
         } else if (ACTION_PHOTOS_GET_UPLOAD_SERVER.equals(action)) {
+            int album_id = args.getInt(0);
+            int group_id = args.getInt(1);
+            return photos_getUploadServer(album_id, group_id, callbackContext);
         } else if (ACTION_PHOTOS_GET_WALL_UPLOAD_SERVER.equals(action)) {
+            int group_id = args.getInt(0);
+            return photos_getWallUploadServer(group_id, callbackContext);
         } else if (ACTION_PHOTOS_SAVE_WALL_PHOTO.equals(action)) {
+            String imageBase64 = args.getString(0);
+            int user_id = args.getInt(1);
+            int group_id = args.getInt(2);
+            return photos_saveWallPhoto(imageBase64, user_id, group_id, callbackContext);
         } else if (ACTION_PHOTOS_SAVE.equals(action)) {
+            String imageBase64 = args.getString(0);
+            int album_id = args.getInt(1);
+            int group_id = args.getInt(2);
+            return photos_save(imageBase64, album_id, group_id, callbackContext);
         } else if (ACTION_FRIENDS_GET.equals(action)) {
+            int user_id = args.getInt(0);
+            String order = args.getString(1);
+            int count = args.getInt(2);
+            int offset = args.getInt(3);
+            String fields = args.getString(4);
+            String name_case = args.getString(5);
+            return friends_get(user_id, order, count, offset, fields, name_case, callbackContext);
         } else if (ACTION_FRIENDS_GET_ONLINE.equals(action)) {
+            int user_id = args.getInt(0);
+            String order = args.getString(1);
+            int count = args.getInt(2);
+            int offset = args.getInt(3);
+            return friends_getOnline(user_id, order, count, offset, callbackContext);
         } else if (ACTION_FRIENDS_GET_MUTUAL.equals(action)) {
+            int user_id = args.getInt(0);
+            int target_id = args.getInt(1);
+            String order = args.getString(2);
+            int count = args.getInt(3);
+            int offset = args.getInt(4);
+            return friends_getMutual(user_id, target_id, order, count, offset, callbackContext);
         } else if (ACTION_FRIENDS_GET_RECENT.equals(action)) {
             int count = args.getInt(0);
             return friends_getRecent(count, callbackContext);
@@ -256,11 +333,159 @@ public class SocialVk extends CordovaPlugin {
         }
     }
 
+    private boolean usersGet(Map<String, Object> params, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.users().get(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean usersSearch(Map<String, Object> params, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.users().search(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean usersIsAppUser(int user_id, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.users().isAppUser(user_id);
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean usersGetSubscriptions(Map<String, Object> params, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.users().getSubscriptions(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean usersGetFollowers(Map<String, Object> params, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.users().getFollowers(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean wallPost(Map<String, Object> params, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.wall().post(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean photos_getUploadServer(int album_id, int group_id, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.photos().getUploadServer(album_id, group_id);
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean photos_getWallUploadServer(int group_id, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.photos().getWallUploadServer(group_id);
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean photos_saveWallPhoto(String imageBase64, int user_id, int group_id, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.uploadWallPhotoRequest(new VKUploadImage(Base64ToBitmap(imageBase64), VKImageParameters.pngImage()), user_id, group_id);
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean photos_save(String imageBase64, int album_id, int group_id, CallbackContext context) {
+        try {
+            VKRequest req = VKApi.uploadAlbumPhotoRequest(new VKUploadImage(Base64ToBitmap(imageBase64), VKImageParameters.pngImage()), album_id, group_id);
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean friends_get(int user_id, String order, int count, int offset, String fields, String name_case, CallbackContext context) {
+        try {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("user_id", user_id);
+            params.put("order", order);
+            params.put("count", count);
+            params.put("offset", offset);
+            params.put("fields", fields);
+            params.put("name_case", name_case);
+            VKRequest req = VKApi.friends().get(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean friends_getOnline(int user_id, String order, int count, int offset, CallbackContext context) {
+        try {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("user_id", user_id);
+            params.put("order", order);
+            params.put("count", count);
+            params.put("offset", offset);
+            VKRequest req = VKApi.friends().getOnline(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
+    private boolean friends_getMutual(int source_id, int target_id, String order, int count, int offset, CallbackContext context) {
+        try {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("source_id", source_id);
+            params.put("target_id", target_id);
+            params.put("order", order);
+            params.put("count", count);
+            params.put("offset", offset);
+            VKRequest req = VKApi.friends().getMutual(new VKParameters(params));
+            performRequest(req, context);
+            return true;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+
     private boolean friends_getRecent(int count, CallbackContext context) {
         try {
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("count", count);
-            VKRequest req = new VKRequest("friends.getRequests", new VKParameters(params));
+            VKRequest req = VKApi.friends().getRecent(new VKParameters(params));
             performRequest(req, context);
             return true;
         } catch(Exception ex) {
@@ -278,7 +503,7 @@ public class SocialVk extends CordovaPlugin {
             params.put("out", out);
             params.put("sort", sort);
             params.put("suggested", suggested);
-            VKRequest req = new VKRequest("friends.getRequests", new VKParameters(params));
+            VKRequest req = VKApi.friends().getRequests(new VKParameters(params));
             performRequest(req, context);
             return true;
         } catch(Exception ex) {
@@ -321,5 +546,11 @@ public class SocialVk extends CordovaPlugin {
                     //More luck next time
                 }
             });
+    }
+
+    Bitmap Base64ToBitmap(String myImageData)
+    {
+        byte[] imageAsBytes = Base64.decode(myImageData.getBytes(),Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 }

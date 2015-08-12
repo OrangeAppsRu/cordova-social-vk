@@ -212,10 +212,10 @@
 
 - (void)users_getSubscriptions:(CDVInvokedUrlCommand*)command
 {
-    NSString *user_id = [command.arguments objectAtIndex:0];
-    NSString *extended = [command.arguments objectAtIndex:1];
-    NSString *offset = [command.arguments objectAtIndex:2];
-    NSString *count = [command.arguments objectAtIndex:3];
+    NSNumber *user_id = [command.arguments objectAtIndex:0];
+    NSNumber *extended = [command.arguments objectAtIndex:1];
+    NSNumber *offset = [command.arguments objectAtIndex:2];
+    NSNumber *count = [command.arguments objectAtIndex:3];
     NSString *fields = [command.arguments objectAtIndex:4];
     VKRequest *req = [[VKApi users] getSubscriptions:@{VK_API_USER_ID: user_id, VK_API_EXTENDED: extended, VK_API_OFFSET: offset, VK_API_COUNT: count, VK_API_FIELDS: fields}];
     [self performRequest:req withCommand:command];
@@ -223,9 +223,9 @@
 
 - (void)users_getFollowers:(CDVInvokedUrlCommand*)command
 {
-    NSString *user_id = [command.arguments objectAtIndex:0];
-    NSString *offset = [command.arguments objectAtIndex:1];
-    NSString *count = [command.arguments objectAtIndex:2];
+    NSNumber *user_id = [command.arguments objectAtIndex:0];
+    NSNumber *offset = [command.arguments objectAtIndex:1];
+    NSNumber *count = [command.arguments objectAtIndex:2];
     NSString *fields = [command.arguments objectAtIndex:3];
     NSString *name_case = [command.arguments objectAtIndex:4];
     VKRequest *req = [[VKApi users] getFollowers:@{VK_API_USER_ID: user_id, VK_API_OFFSET: offset, VK_API_COUNT: count, VK_API_FIELDS: fields, VK_API_NAME_CASE: name_case}];
