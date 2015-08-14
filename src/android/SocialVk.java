@@ -47,6 +47,7 @@ public class SocialVk extends CordovaPlugin {
     private static final String TAG = "SocialVk";
     private static final String ACTION_INIT = "initSocialVk";
     private static final String ACTION_LOGIN = "login";
+    private static final String ACTION_LOGOUT = "logout";
     private static final String ACTION_SHARE = "share";
     private static final String ACTION_USERS_GET = "users_get";
     private static final String ACTION_USERS_SEARCH = "users_search";
@@ -104,6 +105,10 @@ public class SocialVk extends CordovaPlugin {
                 perms[i] = permissions.getString(i);
             }
             return login(perms);
+        } else if(ACTION_LOGOUT.equals(action)) {
+            VKSdk.logout();
+            success();
+            return true;
         } else if (ACTION_SHARE.equals(action)) {
             return shareOrLogin(args.getString(0), args.getString(1), args.getString(2));
         } else if (ACTION_USERS_GET.equals(action)) {
