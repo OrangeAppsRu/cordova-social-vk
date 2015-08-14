@@ -7,7 +7,7 @@
 
 @implementation SocialVk {
     CDVInvokedUrlCommand *savedCommand;
-    void (^vkCallBackBlock)(NSString *);
+    void (^vkCallBackBlock)(NSString *, NSString *);
     BOOL inited;
     NSMutableDictionary *loginDetails;
 }
@@ -56,7 +56,7 @@
 {
     NSArray *permissions = [command.arguments objectAtIndex:0];
     if(![VKSdk isLoggedIn]) {
-        [self vkLoginWithPermissions:permissions andBlock:^(NSString *token) {
+        [self vkLoginWithPermissions:permissions andBlock:^(NSString *token, NSString *error) {
             if(token) {
                 VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{@"fields": @"id, nickname, first_name, last_name, sex, bdate, timezone, photo, photo_big, city, country"} andHttpMethod:@"GET"];
                 [req executeWithResultBlock:^(VKResponse *response) {
@@ -76,7 +76,7 @@
                 }];
             } else {
                 NSLog(@"Cant login to VKontakte");
-                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+                CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }
         }];
@@ -116,7 +116,7 @@
     //NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
 
     if(![VKSdk isLoggedIn]) {
-        [self vkLoginWithPermissions:nil andBlock:^(NSString *token) {
+        [self vkLoginWithPermissions:nil andBlock:^(NSString *token, NSString *error) {
             CDVPluginResult* pluginResult = nil;
             if(token) {
                 VKShareDialogController *sh = [VKShareDialogController new];
@@ -130,7 +130,7 @@
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             } else {
                 NSLog(@"Cant login to VKontakte");
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }
         }];
@@ -147,7 +147,7 @@
     }
 }
 
--(void)vkLoginWithPermissions:(NSArray*)permissions andBlock:(void (^)(NSString *))block
+-(void)vkLoginWithPermissions:(NSArray*)permissions andBlock:(void (^)(NSString *, NSString *))block
 {
     vkCallBackBlock = [block copy];
     if(!permissions || permissions.count < 1)
@@ -358,7 +358,7 @@
 -(void) vkSdkReceivedNewToken:(VKAccessToken*) newToken
 {
     NSLog(@"VK Token %@", newToken.accessToken);
-    if(vkCallBackBlock) vkCallBackBlock(newToken.accessToken);
+    if(vkCallBackBlock) vkCallBackBlock(newToken.accessToken, nil);
 }
 
 - (void)vkSdkAcceptedUserToken:(VKAccessToken *)token
@@ -374,7 +374,7 @@
 -(void) vkSdkUserDeniedAccess:(VKError*) authorizationError
 {
     NSLog(@"VK Error %@", authorizationError);
-    if(vkCallBackBlock) vkCallBackBlock(nil);
+    if(vkCallBackBlock) vkCallBackBlock(nil, authorizationError.description);
 }
 
 -(void) vkSdkShouldPresentViewController:(UIViewController *)controller
