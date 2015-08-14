@@ -290,49 +290,50 @@ public class SocialVk extends CordovaPlugin {
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         Log.i(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != 0) {
-            VKCallback<VKAccessToken> callback = new VKCallback<VKAccessToken>() {
-                    @Override
-                    public void onResult(VKAccessToken res) {
-                        // User passed Authorization
-                        final String token = res.accessToken;
-                        Log.i(TAG, "VK new token: "+token);
-                        res.saveTokenToSharedPreferences(getApplicationContext(), sTokenKey);
-                        VKRequest request = VKApi.users().get();
-                        request.executeWithListener(new VKRequestListener() {
-                                @Override
-                                public void onComplete(VKResponse response) {
-                                    try {
-                                        JSONObject loginDetails = new JSONObject();
-                                        loginDetails.put("token", token);
-                                        loginDetails.put("user", response.json.getJSONArray("response"));
-                                        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, loginDetails.toString()));
-                                        _callbackContext.success();
-                                    } catch (JSONException exception) {
-                                        Log.e(TAG, "JSON error:", exception);
-                                        fail();
-                                    }
+        if(!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+                @Override
+                public void onResult(VKAccessToken res) {
+                    // User passed Authorization
+                    final String token = res.accessToken;
+                    Log.i(TAG, "VK new token: "+token);
+                    res.saveTokenToSharedPreferences(getApplicationContext(), sTokenKey);
+                    VKRequest request = VKApi.users().get();
+                    request.executeWithListener(new VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                try {
+                                    JSONObject loginDetails = new JSONObject();
+                                    loginDetails.put("token", token);
+                                    loginDetails.put("user", response.json.getJSONArray("response"));
+                                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, loginDetails.toString()));
+                                    _callbackContext.success();
+                                } catch (JSONException exception) {
+                                    Log.e(TAG, "JSON error:", exception);
+                                    fail();
                                 }
-                                @Override
-                                public void onError(VKError error) {
-                                    Log.e(TAG, error.errorMessage + error.errorReason);
-                                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error.errorMessage));
-                                    _callbackContext.error(error.errorMessage);
-                                }
-                            });
-                        //share(savedUrl, savedComment, savedImageUrl);
-                    }
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                String err = error.toString();
+                                Log.e(TAG, err);
+                                _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
+                                _callbackContext.error(error.errorMessage);
+                            }
+                        });
+                    //share(savedUrl, savedComment, savedImageUrl);
+                }
 
-                    @Override
-                    public void onError(VKError error) {
-                        // User didn't pass Authorization
-                        new AlertDialog.Builder(getApplicationContext()).setMessage(error.errorMessage).show();
-                        Log.w(TAG, "VK Authorization error! "+error.errorMessage);
-                        fail();
-                    }
-                };
-            VKSdk.onActivityResult(requestCode, resultCode, data, callback);
+                @Override
+                public void onError(VKError error) {
+                    // User didn't pass Authorization
+                    String err = error.toString();
+                    Log.e(TAG, "VK Authorization error! "+err);
+                    //new AlertDialog.Builder(getApplicationContext()).setMessage(error.errorMessage).show();
+                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
+                    _callbackContext.error(error.errorMessage);
+                }
+            })) {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
   
