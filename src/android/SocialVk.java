@@ -568,9 +568,10 @@ public class SocialVk extends CordovaPlugin {
                 }
                 @Override
                 public void onError(VKError error) {
-                    Log.e(TAG, error.errorMessage + error.errorReason);
-                    context.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error.errorMessage));
-                    context.error(error.errorMessage);
+                    String err = error.toString();
+                    Log.e(TAG, err);
+                    context.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
+                    context.error(err);
                 }
                 @Override
                 public void onProgress(VKRequest.VKProgressType progressType,
