@@ -23,12 +23,15 @@ package com.vk.sdk;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -38,6 +41,8 @@ import android.webkit.CookieSyncManager;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.payments.VKPaymentsCallback;
+import com.vk.sdk.payments.VKPaymentsReceiver;
 import com.vk.sdk.util.VKUtil;
 
 import java.util.ArrayList;
@@ -60,6 +65,9 @@ public class VKSdk {
     public static final String SDK_APP_ID = "com_vk_sdk_AppId";
     public static final String SDK_API_VERSION = "com_vk_sdk_ApiVersion";
 
+    private static final String VK_SDK_APP_ID_PREF_KEY = "VK_SDK_APP_ID_PLEASE_DONT_TOUCH";
+    private static final String VK_SDK_APP_VERSION_PREF_KEY = "VK_SDK_APP_VERSION_PLEASE_DONT_TOUCH";
+
     static final int RESULT_OK = Activity.RESULT_OK;
     static final int RESULT_ERROR = Activity.RESULT_CANCELED;
 
@@ -69,6 +77,13 @@ public class VKSdk {
      * App id for current application
      */
     private static int sCurrentAppId = 0;
+    private static boolean isPaymentsEnable = false;
+
+    private final Context applicationContext;
+
+    private static VKSdk vkSdk = null; // use for initialize like builder
+
+    private static boolean sIsCustomInitialize = false;
 
     /**
      * Api version for current session
@@ -94,8 +109,8 @@ public class VKSdk {
      */
     private static final List<VKAccessTokenTracker> sVKTokenListeners = new CopyOnWriteArrayList<>();
 
-    private VKSdk() {
-
+    private VKSdk(Context applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     static void addVKTokenTracker(VKAccessTokenTracker vkAccessTokenTracker) {
@@ -117,38 +132,94 @@ public class VKSdk {
         });
     }
 
+    public static boolean isIsPaymentsEnable() {
+        return isPaymentsEnable;
+    }
+
+    public static void requestUserState(Context ctx, VKPaymentsCallback callback) {
+        VKPaymentsCallback.requestUserState(ctx, callback);
+    }
+
+    public void withPayments() {
+        isPaymentsEnable = true;
+        VKPaymentsReceiver.onReceiveStatic(applicationContext);
+    }
+
+    public static VKSdk customInitialize(Context ctx, int appId, String apiVer) {
+        if (appId == 0) {
+            appId = getIntFromPref(ctx, VK_SDK_APP_ID_PREF_KEY);
+        }
+        if (TextUtils.isEmpty(apiVer)) {
+            apiVer = getStringFromPref(ctx, VK_SDK_APP_VERSION_PREF_KEY, VKSdkVersion.DEFAULT_API_VERSION);
+        }
+        if (appId == 0) {
+            throw new RuntimeException("your_app_id is 0");
+        }
+        sIsCustomInitialize = true;
+        VKSdk vkSdk = initialize(ctx, appId, apiVer);
+        if (sCurrentAppId != 0) {
+            storeIntToPref(ctx, VK_SDK_APP_ID_PREF_KEY, sCurrentAppId);
+        }
+        if (sCurrentApiVersion != null) {
+            storeStringToPref(ctx, VK_SDK_APP_VERSION_PREF_KEY, sCurrentApiVersion);
+        }
+        return vkSdk;
+    }
+
+    public static boolean isCustomInitialize() {
+        return sIsCustomInitialize;
+    }
+
     /**
      * Call this method to prepare VK SDK for work. Best for call - in your application class.
      * Don't forget to call this method when you starting a service
      *
-     * @param applicationContext context of current application
+     * @param ctx context of current application
      */
-    public static void initialize(Context applicationContext) {
-        if (applicationContext == null) {
-            throw new NullPointerException("Application context cannot be null");
+    public static VKSdk initialize(Context ctx) {
+        if (sCurrentAppId != 0) {
+            return vkSdk;
         }
 
-        sCurrentAppId = getIntResByName(applicationContext, SDK_APP_ID);
-        sCurrentApiVersion = getStringResByName(applicationContext, SDK_API_VERSION);
-        if (sCurrentApiVersion == null) {
-            sCurrentApiVersion = VKSdkVersion.DEFAULT_API_VERSION;
+        if (!(ctx instanceof Application)) {
+            if (ctx == null) {
+                throw new NullPointerException("Application context cannot be null");
+            } else {
+                throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
+            }
+        } else {
+            if (!hasInStack(Application.class, "onCreate")) {
+                throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
+            }
         }
 
-        sCurrentLoginState = LoginState.Unknown;
-
-        wakeUpSession(applicationContext);
-
-        if (sCurrentAppId == 0) {
+        int appId = getIntResByName(ctx, SDK_APP_ID);
+        if (appId == 0) {
             throw new RuntimeException("String <integer name=\"com_vk_sdk_AppId\">your_app_id</integer> did not find in your resources.xml");
         }
+
+        return initialize(ctx, appId, getStringResByName(ctx, SDK_API_VERSION, VKSdkVersion.DEFAULT_API_VERSION));
     }
 
-    private static String getStringResByName(Context ctx, String aString) {
+    private synchronized static VKSdk initialize(Context applicationContext, int appId, String appVer) {
+        if (sCurrentAppId == 0) {
+            vkSdk = new VKSdk(applicationContext);
+            sCurrentAppId = appId;
+            sCurrentApiVersion = TextUtils.isEmpty(appVer) ? VKSdkVersion.DEFAULT_API_VERSION : appVer;
+            sCurrentLoginState = LoginState.Unknown;
+            wakeUpSession(applicationContext);
+        }
+
+        return vkSdk;
+    }
+
+    private static String getStringResByName(Context ctx, String aString, String def) {
         int resId = ctx.getResources().getIdentifier(aString, "string", ctx.getPackageName());
         try {
-            return ctx.getString(resId);
+            String ret = ctx.getString(resId);
+            return TextUtils.isEmpty(ret) ? def : ret;
         } catch (Exception e) {
-            return null;
+            return def;
         }
     }
 
@@ -220,13 +291,14 @@ public class VKSdk {
      * @param callback   activity result processing callback
      * @return If SDK parsed activity result properly, returns true. You can return from onActivityResult(). Otherwise, returns false.
      */
-    static boolean processActivityResult(int resultCode, @Nullable Intent result, @Nullable VKCallback<VKAccessToken> callback) {
+    static boolean processActivityResult(@NonNull Context ctx, int resultCode, @Nullable Intent result,
+                                         @Nullable VKCallback<VKAccessToken> callback) {
         if (resultCode != Activity.RESULT_OK || result == null) {
             //Result isn't ok, maybe user canceled
             if (callback != null) {
                 callback.onError(new VKError(VKError.VK_CANCELED));
             }
-            updateLoginState();
+            updateLoginState(ctx);
             return false;
         }
 
@@ -244,7 +316,7 @@ public class VKSdk {
             }
         }
 
-        tokenResult = checkAndSetToken(tokenParams);
+        tokenResult = checkAndSetToken(ctx, tokenParams);
         if (tokenResult.error != null && callback != null) {
             callback.onError(tokenResult.error);
         } else if (tokenResult.token != null) {
@@ -262,7 +334,7 @@ public class VKSdk {
             }
         }
         requestedPermissions = null;
-        updateLoginState();
+        updateLoginState(ctx);
         return true;
     }
 
@@ -272,7 +344,7 @@ public class VKSdk {
      * @param tokenParams params of token
      * @return true if access token was set, or error was provided
      */
-    private static CheckTokenResult checkAndSetToken(@Nullable Map<String, String> tokenParams) {
+    private static CheckTokenResult checkAndSetToken(@NonNull Context ctx, @Nullable Map<String, String> tokenParams) {
         if (tokenParams != null && requestedPermissions != null) {
             tokenParams.put(VKAccessToken.SCOPE, TextUtils.join(",", requestedPermissions));
         }
@@ -291,11 +363,11 @@ public class VKSdk {
             VKAccessToken old = VKAccessToken.currentToken();
             if (old != null) {
                 VKAccessToken newToken = old.copyWithToken(token);
-                VKAccessToken.replaceToken(old.copyWithToken(token));
+                VKAccessToken.replaceToken(ctx, old.copyWithToken(token));
                 notifyVKTokenChanged(old, newToken);
                 return new CheckTokenResult(old, token);
             } else {
-                VKAccessToken.replaceToken(token);
+                VKAccessToken.replaceToken(ctx, token);
                 notifyVKTokenChanged(old, token);
                 return new CheckTokenResult(token);
             }
@@ -318,7 +390,7 @@ public class VKSdk {
      * @param context An application context for store an access token
      * @return true, if an access token exists and not expired
      */
-    public static boolean wakeUpSession(Context context) {
+    public static boolean wakeUpSession(@NonNull Context context) {
         return wakeUpSession(context, null);
     }
 
@@ -329,10 +401,9 @@ public class VKSdk {
      * @param loginStateCallback if callback specified, {@link VKCallback#onResult(Object)} method will be called after login state changed
      * @return true, if an access token exists and not expired
      */
-    public static boolean wakeUpSession(Context context, final VKCallback<LoginState> loginStateCallback) {
-        if (context != null) {
-            VKUIHelper.setApplicationContext(context);
-        }
+    public static boolean wakeUpSession(@NonNull final Context context, final VKCallback<LoginState> loginStateCallback) {
+        final Context appContext = context.getApplicationContext();
+        VKUIHelper.setApplicationContext(appContext);
 
         VKAccessToken token = VKAccessToken.currentToken();
 
@@ -341,26 +412,26 @@ public class VKSdk {
             trackVisitor(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
-                    updateLoginState(loginStateCallback);
+                    updateLoginState(context, loginStateCallback);
                 }
 
                 @Override
                 public void onError(VKError error) {
                     //Possible double call of access token invalid
                     if (error != null && error.apiError != null && error.apiError.errorCode == 5) {
-                        onAccessTokenIsInvalid();
+                        onAccessTokenIsInvalid(appContext);
                     }
-                    updateLoginState(loginStateCallback);
+                    updateLoginState(context, loginStateCallback);
                 }
             });
             return true;
         }
-        updateLoginState(loginStateCallback);
+        updateLoginState(context, loginStateCallback);
         return false;
     }
 
-    private static void onAccessTokenIsInvalid() {
-        VKAccessToken old = VKAccessToken.replaceToken(null);
+    private static void onAccessTokenIsInvalid(@NonNull Context ctx) {
+        VKAccessToken old = VKAccessToken.replaceToken(ctx, null);
         if (old != null) {
             notifyVKTokenChanged(old, null);
         }
@@ -373,7 +444,7 @@ public class VKSdk {
      */
     public static void notifySdkAboutApiError(VKError apiError) {
         if (apiError.errorCode == 5) {
-            onAccessTokenIsInvalid();
+            onAccessTokenIsInvalid(VKUIHelper.getApplicationContext());
         }
     }
 
@@ -382,19 +453,18 @@ public class VKSdk {
      */
     @SuppressLint("NewApi")
     public static void logout() {
+        Context context = VKUIHelper.getApplicationContext();
         if (Build.VERSION.SDK_INT < 21) {
-            CookieSyncManager.createInstance(VKUIHelper.getApplicationContext());
+            CookieSyncManager.createInstance(context);
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.removeAllCookie();
         } else {
-            //CookieManager.getInstance().removeAllCookies(null);
-            // XDK with crosswalk 7 can not build this ^
-            // error: cannot find symbol removeAllCookies
+            CookieManager.getInstance().removeAllCookies(null);
         }
 
-        VKAccessToken.replaceToken(null);
+        VKAccessToken.replaceToken(VKUIHelper.getApplicationContext(), null);
 
-        updateLoginState();
+        updateLoginState(context);
     }
 
     /**
@@ -413,11 +483,12 @@ public class VKSdk {
         r.executeWithListener(l);
     }
 
-    private static void updateLoginState() {
-        updateLoginState(null);
+    private static void updateLoginState(Context context) {
+        updateLoginState(context, null);
     }
 
-    private static void updateLoginState(VKCallback<LoginState> callback) {
+    private static void updateLoginState(Context context, VKCallback<LoginState> callback) {
+        VKUIHelper.setApplicationContext(context);
         if (VKAccessToken.currentToken() != null) {
             forceLoginState(LoginState.LoggedIn, callback);
         } else {
@@ -456,5 +527,46 @@ public class VKSdk {
         public CheckTokenResult(VKError err) {
             this.error = err;
         }
+    }
+
+    private static boolean hasInStack(@NonNull final Class<?> clazz, @NonNull final String method) {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (int i = stackTrace.length - 2; i >= 0; --i) {
+            StackTraceElement element = stackTrace[i];
+            try {
+                Class<?> aClass = Class.forName(element.getClassName());
+                aClass.asSubclass(clazz);
+                if (method.equals(element.getMethodName())) {
+                    return true;
+                }
+            } catch (ClassNotFoundException | ClassCastException e) {
+                // nothing
+            }
+        }
+        return false;
+    }
+
+    private static int getIntFromPref(@NonNull Context ctx, @NonNull String key) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getInt(key, 0);
+    }
+
+    private static void storeIntToPref(@NonNull Context ctx, @NonNull String key, int value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt(key, value);
+        edit.apply();
+    }
+
+    private static String getStringFromPref(@NonNull Context ctx, @NonNull String key, String def) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getString(key, def);
+    }
+
+    private static void storeStringToPref(@NonNull Context ctx, @NonNull String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString(key, value);
+        edit.apply();
     }
 }

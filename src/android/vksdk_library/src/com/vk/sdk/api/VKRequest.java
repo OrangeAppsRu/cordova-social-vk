@@ -22,6 +22,7 @@
 package com.vk.sdk.api;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -65,6 +66,8 @@ public class VKRequest extends VKObject {
         GET,
         POST
     }
+
+    public final Context context;
 
     /**
      * Selected method name
@@ -111,6 +114,7 @@ public class VKRequest extends VKObject {
      */
     private String mPreferredLang;
 
+    private boolean mUseLooperForCallListener = true;
     /**
      * Looper which starts request
      */
@@ -192,6 +196,8 @@ public class VKRequest extends VKObject {
      * @param modelClass class for automatic parse
      */
     public VKRequest(String method, VKParameters parameters, Class<? extends VKApiModel> modelClass) {
+        this.context = VKUIHelper.getApplicationContext();
+
         this.methodName = method;
         if (parameters == null) {
             parameters = new VKParameters();
@@ -213,6 +219,10 @@ public class VKRequest extends VKObject {
         setModelClass(modelClass);
     }
 
+    public void setUseLooperForCallListener(boolean useLooperForCallListener) {
+        this.mUseLooperForCallListener = useLooperForCallListener;
+    }
+
     /**
      * Executes that request, and returns result to blocks
      *
@@ -221,6 +231,15 @@ public class VKRequest extends VKObject {
     public void executeWithListener(VKRequestListener listener) {
         this.requestListener = listener;
         start();
+    }
+
+    /**
+     * Executes that request, and returns result to blocks
+     *
+     * @param listener listener for request events
+     */
+    public void executeSyncWithListener(VKRequestListener listener) {
+        VKSyncRequestUtil.executeSyncWithListener(this, listener);
     }
 
     public void setRequestListener(@Nullable VKRequestListener listener) {
@@ -292,7 +311,7 @@ public class VKRequest extends VKObject {
         return request;
     }
 
-    public VKAbstractOperation getOperation() {
+    VKAbstractOperation getOperation() {
         if (this.parseModel) {
             if (this.mModelClass != null) {
                 mLoadingOperation = new VKModelOperation(getPreparedRequest(), this.mModelClass);
@@ -396,8 +415,7 @@ public class VKRequest extends VKObject {
     public void cancel() {
         if (mLoadingOperation != null) {
             mLoadingOperation.cancel();
-        }
-        else {
+        } else {
             provideError(new VKError(VKError.VK_CANCELED));
         }
     }
@@ -410,10 +428,16 @@ public class VKRequest extends VKObject {
     private void provideError(final VKError error) {
         error.request = this;
 
+        final boolean useLooperForCallListener = mUseLooperForCallListener;
+
+        if (!useLooperForCallListener && requestListener != null) {
+            requestListener.onError(error);
+        }
+
         runOnLooper(new Runnable() {
             @Override
             public void run() {
-                if (requestListener != null) {
+                if (useLooperForCallListener && requestListener != null) {
                     requestListener.onError(error);
                 }
                 if (mPostRequestsQueue != null && mPostRequestsQueue.size() > 0) {
@@ -443,6 +467,8 @@ public class VKRequest extends VKObject {
             response.responseString = ((VKHttpOperation) mLoadingOperation).getResponseString();
         }
 
+        final boolean useLooperForCallListener = mUseLooperForCallListener;
+
         runOnLooper(new Runnable() {
             @Override
             public void run() {
@@ -452,11 +478,15 @@ public class VKRequest extends VKObject {
                     }
                 }
 
-                if (requestListener != null) {
+                if (useLooperForCallListener && requestListener != null) {
                     requestListener.onComplete(response);
                 }
             }
         });
+
+        if (!useLooperForCallListener && requestListener != null) {
+            requestListener.onComplete(response);
+        }
     }
 
     /**
@@ -508,10 +538,10 @@ public class VKRequest extends VKObject {
                 apiError.request = this;
                 if (error.apiError.errorCode == 14) {
                     this.mLoadingOperation = null;
-                    VKServiceActivity.interruptWithError(apiError, VKServiceActivity.VKServiceType.Captcha);
+                    VKServiceActivity.interruptWithError(context, apiError, VKServiceActivity.VKServiceType.Captcha);
                     return true;
                 } else if (apiError.errorCode == 17) {
-                    VKServiceActivity.interruptWithError(apiError, VKServiceActivity.VKServiceType.Validation);
+                    VKServiceActivity.interruptWithError(context, apiError, VKServiceActivity.VKServiceType.Validation);
                     return true;
                 }
             }
@@ -522,9 +552,9 @@ public class VKRequest extends VKObject {
 
     private String getLang() {
         String result = mPreferredLang;
-        Context ctx = VKUIHelper.getApplicationContext();
-        if (useSystemLanguage && ctx != null && ctx.getResources() != null) {
-            result = ctx.getResources().getConfiguration().locale.getLanguage();
+        Resources res = Resources.getSystem();
+        if (useSystemLanguage && res != null) {
+            result = res.getConfiguration().locale.getLanguage();
             if (result.equals("uk")) {
                 result = "ua";
             }
@@ -560,6 +590,7 @@ public class VKRequest extends VKObject {
 
     /**
      * Specify parser for response json, which creates data model
+     *
      * @param parser
      */
     public void setResponseParser(VKParser parser) {
@@ -634,5 +665,17 @@ public class VKRequest extends VKObject {
 
     public static VKRequest getRegisteredRequest(long requestId) {
         return (VKRequest) getRegisteredObject(requestId);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder(super.toString());
+        builder.append("{").append(methodName).append(" ");
+        VKParameters parameters = getMethodParameters();
+        for (String key : parameters.keySet()) {
+            builder.append(key).append("=").append(parameters.get(key)).append(" ");
+        }
+        builder.append("}");
+        return  builder.toString();
     }
 }

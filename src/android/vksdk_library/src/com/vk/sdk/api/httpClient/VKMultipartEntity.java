@@ -21,11 +21,10 @@
 
 package com.vk.sdk.api.httpClient;
 
+import android.util.Pair;
 import android.webkit.MimeTypeMap;
 
-import org.apache.http.Header;
-import org.apache.http.entity.AbstractHttpEntity;
-import org.apache.http.message.BasicHeader;
+import com.vk.sdk.api.model.VKAttachments;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,24 +37,25 @@ import java.util.Random;
 /**
  * Class used for build upload multipart data for VK servers
  */
-public class VKMultipartEntity extends AbstractHttpEntity {
+public class VKMultipartEntity {
 
     private static final String VK_BOUNDARY = "Boundary(======VK_SDK_%d======)";
 
     private final String mBoundary;
     private final File[] mFiles;
+    private String mType;
 
     public VKMultipartEntity(File[] files) {
         mBoundary = String.format(Locale.US, VK_BOUNDARY, new Random().nextInt());
         mFiles = files;
     }
 
-    @Override
-    public boolean isRepeatable() {
-        return true;
+    public VKMultipartEntity(File[] files, String type) {
+        mBoundary = String.format(Locale.US, VK_BOUNDARY, new Random().nextInt());
+        mFiles = files;
+        mType = type;
     }
 
-    @Override
     public long getContentLength() {
         long length = 0;
         for (int i = 0; i < mFiles.length; i++) {
@@ -64,22 +64,24 @@ public class VKMultipartEntity extends AbstractHttpEntity {
             length += getFileDescription(f, i).length();
         }
         length += getBoundaryEnd().length();
-
         return length;
     }
 
-    @Override
-    public Header getContentType() {
-        return new BasicHeader("Content-Type", String.format("multipart/form-data; boundary=%s", mBoundary));
+    public Pair<String, String> getContentType() {
+        return new Pair<>("Content-Type", String.format("multipart/form-data; boundary=%s", mBoundary));
     }
 
-    @Override
     public InputStream getContent() throws IOException, IllegalStateException {
         throw new UnsupportedOperationException("Multipart form entity does not implement #getContent()");
     }
 
-    private String getFileDescription(File uploadFile, int i) {
-        String fileName = String.format(Locale.US, "file%d", i + 1);
+    protected String getFileDescription(File uploadFile, int i) {
+        String fileName;
+        if (mType != null && mType.equals(VKAttachments.TYPE_DOC)) {
+            fileName = "file";
+        } else {
+            fileName = String.format(Locale.US, "file%d", i + 1);
+        }
         String extension = MimeTypeMap.getFileExtensionFromUrl(uploadFile.getAbsolutePath());
         return String.format("\r\n--%s\r\n", mBoundary) +
                 String.format("Content-Disposition: form-data; name=\"%s\"; filename=\"%s.%s\"\r\n", fileName, fileName, extension) +
@@ -90,7 +92,6 @@ public class VKMultipartEntity extends AbstractHttpEntity {
         return String.format("\r\n--%s--\r\n", mBoundary);
     }
 
-    @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         for (int i = 0; i < mFiles.length; i++) {
             File uploadFile = mFiles[i];
@@ -104,11 +105,6 @@ public class VKMultipartEntity extends AbstractHttpEntity {
             reader.close();
         }
         outputStream.write(getBoundaryEnd().getBytes("UTF-8"));
-    }
-
-    @Override
-    public boolean isStreaming() {
-        return true;
     }
 
     protected static String getMimeType(String url) {

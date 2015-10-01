@@ -44,6 +44,15 @@ public class VKApiConst {
     //get users
     public static final String NAME_CASE = "name_case";
 
+    //Messages
+    public static final String OUT = "out";
+    public static final String TIME_OFFSET = "time_offset";
+    public static final String FILTERS = "filters";
+    public static final String LAST_MESSAGE_ID = "last_message_id";
+    public static final String START_MESSAGE_ID = "start_message_id";
+    public static final String PREVIEW_LENGTH = "preview_length";
+    public static final String UNREAD = "unread";
+
     //Get subscriptions
     public static final String EXTENDED = "extended";
 
@@ -85,6 +94,7 @@ public class VKApiConst {
     public static final String LONG = "long";
     public static final String PLACE_ID = "place_id";
     public static final String POST_ID = "post_id";
+    public static final String POSTS = "posts";
 
     //Errors
     public static final String ERROR_CODE = "error_code";

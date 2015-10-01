@@ -1,5 +1,5 @@
 //
-//  Copyright (c) 2014 VK.com
+//  Copyright (c) 2015 VK.com
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
 //  this software and associated documentation files (the "Software"), to deal in
@@ -19,42 +19,15 @@
 //  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.vk.sdk.api.photo;
+package com.vk.sdk.payments;
 
-import com.vk.sdk.api.VKUploadBase;
-import com.vk.sdk.api.httpClient.VKHttpClient;
-import com.vk.sdk.api.httpClient.VKJsonOperation;
+import android.content.Context;
 
-import java.io.File;
+public abstract class VKPaymentsCallback {
 
-/**
- * Provides common part of photo upload process
- */
-public abstract class VKUploadPhotoBase extends VKUploadBase {
-	private static final long serialVersionUID = -4566961568409572159L;
-	/**
-     * ID of album to upload
-     */
-    protected long mAlbumId;
-    /**
-     * ID of group to upload
-     */
-    protected long mGroupId;
-    /**
-     * ID of user wall to upload
-     */
-    protected long mUserId;
-    /**
-     * Image to upload
-     */
-    protected File[] mImages;
-
-    public VKUploadPhotoBase() {
-        super();
+    public static void requestUserState(Context ctx, VKPaymentsCallback callback) {
+        VKPaymentsServerSender.getInstance(ctx).requestUserState(callback);
     }
 
-    @Override
-    protected VKJsonOperation getUploadOperation(String uploadUrl) {
-        return new VKJsonOperation(VKHttpClient.fileUploadRequest(uploadUrl, mImages));
-    }
+    public abstract void onUserState(boolean userIsVk);
 }

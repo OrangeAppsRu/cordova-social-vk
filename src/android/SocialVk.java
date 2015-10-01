@@ -276,6 +276,9 @@ public class SocialVk extends CordovaPlugin {
                             public void onVkShareCancel() {
                                 Log.i(TAG, "VK sharing cancelled");
                             }
+                            public void onVkShareError(VKError err) {
+                                Log.e(TAG, err.toString());
+                            }
                         });
                 if(image != null) {
                     vsh.setAttachmentImages(new VKUploadImage[]{
