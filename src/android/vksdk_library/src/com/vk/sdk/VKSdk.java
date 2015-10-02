@@ -459,7 +459,9 @@ public class VKSdk {
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.removeAllCookie();
         } else {
-            CookieManager.getInstance().removeAllCookies(null);
+            //CookieManager.getInstance().removeAllCookies(null);
+            // XDK with crosswalk 7 can not build this ^
+            // error: cannot find symbol removeAllCookies
         }
 
         VKAccessToken.replaceToken(VKUIHelper.getApplicationContext(), null);
