@@ -188,9 +188,12 @@ public class VKSdk {
                 throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
             }
         } else {
+            /*
             if (!hasInStack(Application.class, "onCreate")) {
                 throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
             }
+            VK devs are very strange people
+            */
         }
 
         int appId = getIntResByName(ctx, SDK_APP_ID);

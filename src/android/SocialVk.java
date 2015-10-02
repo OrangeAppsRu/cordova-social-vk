@@ -77,7 +77,7 @@ public class SocialVk extends CordovaPlugin {
      * @return the application context
      */
     private Context getApplicationContext() {
-        return this.webView.getContext();
+        return this.getActivity().getApplicationContext();
     }
 
     private Activity getActivity() {
@@ -92,7 +92,10 @@ public class SocialVk extends CordovaPlugin {
         _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
         _callbackContext.error("Error");
     }
-	
+    @Override
+    protected void pluginInitialize() {
+    }
+
     @Override
     public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
         this._callbackContext = callbackContext;
