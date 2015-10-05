@@ -92,9 +92,6 @@ public class SocialVk extends CordovaPlugin {
         _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
         _callbackContext.error("Error");
     }
-    @Override
-    protected void pluginInitialize() {
-    }
 
     @Override
     public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
