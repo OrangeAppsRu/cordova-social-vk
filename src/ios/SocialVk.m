@@ -5,6 +5,8 @@
 #import <VKSdk/VKBundle.h>
 #import "NSData+Base64.h"
 
+static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
+
 @implementation SocialVk {
     CDVInvokedUrlCommand *savedCommand;
     void (^vkCallBackBlock)(NSString *, NSString *);
@@ -152,7 +154,10 @@
     vkCallBackBlock = [block copy];
     if(!permissions || permissions.count < 1)
     permissions = @[VK_PER_WALL, VK_PER_OFFLINE];
-    [VKSdk authorize:permissions revokeAccess:NO forceOAuth:YES inApp:YES display:VK_DISPLAY_IOS];
+    BOOL inApp = YES;
+    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:VK_AUTHORIZE_URL_STRING]])
+        inApp = NO;
+    [VKSdk authorize:permissions revokeAccess:NO forceOAuth:YES inApp:inApp display:VK_DISPLAY_IOS];
 }
 
 -(void)logout:(CDVInvokedUrlCommand *)command
