@@ -157,7 +157,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     BOOL inApp = YES;
     if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:VK_AUTHORIZE_URL_STRING]])
         inApp = NO;
-    [VKSdk authorize:permissions revokeAccess:NO forceOAuth:YES inApp:inApp display:VK_DISPLAY_IOS];
+    [VKSdk authorize:permissions revokeAccess:NO forceOAuth:NO inApp:inApp display:VK_DISPLAY_IOS];
 }
 
 -(void)logout:(CDVInvokedUrlCommand *)command
