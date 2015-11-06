@@ -171,10 +171,13 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 
 -(void)performRequest:(VKRequest*)request withCommand:(CDVInvokedUrlCommand*)command
 {
+    savedCommand = command;
     [request executeWithResultBlock:^(VKResponse *response) {
+        savedCommand = nil;
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:response.json];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     } errorBlock:^(NSError *error) {
+        savedCommand = nil;
         NSLog(@"VK Error: %@", error);
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -364,6 +367,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 {
     NSLog(@"VK Token %@", newToken.accessToken);
     if(vkCallBackBlock) vkCallBackBlock(newToken.accessToken, nil);
+    vkCallBackBlock = nil;
 }
 
 - (void)vkSdkAcceptedUserToken:(VKAccessToken *)token
@@ -379,7 +383,13 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 -(void) vkSdkUserDeniedAccess:(VKError*) authorizationError
 {
     NSLog(@"VK Error %@", authorizationError);
-    if(vkCallBackBlock) vkCallBackBlock(nil, authorizationError.description);
+    if(vkCallBackBlock) {
+        vkCallBackBlock(nil, authorizationError.description);
+        vkCallBackBlock = nil;
+    } else if(savedCommand) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:authorizationError.description];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:savedCommand.callbackId];
+    }
 }
 
 -(void) vkSdkShouldPresentViewController:(UIViewController *)controller
