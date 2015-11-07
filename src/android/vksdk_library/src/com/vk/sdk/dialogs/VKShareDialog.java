@@ -33,7 +33,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import com.android.annotations.NonNull;
 import android.app.DialogFragment;
 import android.util.Log;
 import android.view.Display;
