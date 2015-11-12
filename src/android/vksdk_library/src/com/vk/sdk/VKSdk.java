@@ -262,7 +262,11 @@ public class VKSdk {
             if (resultCode == VKSdk.RESULT_OK) {
                 vkCallback.onResult(VKAccessToken.currentToken());
             } else if (resultCode == VKSdk.RESULT_ERROR) {
-                vkCallback.onError((VKError) VKObject.getRegisteredObject(data.getLongExtra(VKSdk.EXTRA_ERROR_ID, 0)));
+                try {
+                    vkCallback.onError((VKError) VKObject.getRegisteredObject(data.getLongExtra(VKSdk.EXTRA_ERROR_ID, 0)));
+                } catch (NullPointerException e) {
+                    // do nothing
+                }
             }
             return true;
         } else {
