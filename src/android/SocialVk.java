@@ -120,13 +120,18 @@ public class SocialVk extends CordovaPlugin {
         } else if (ACTION_USERS_SEARCH.equals(action)) {
             String q = args.optString(0);
             JSONObject params = args.optJSONObject(0);
-            if(q != null) {
+            if(params != null)
+            {
+                return usersSearch(VKJsonHelper.toMap(params), callbackContext);
+            } 
+            else if(q != null)
+            {
                 HashMap<String, Object> paramsMap = new HashMap<String, Object>();
                 paramsMap.put("q", q);
                 return usersSearch(paramsMap, callbackContext);
-            } else if(params != null) {
-                return usersSearch(VKJsonHelper.toMap(params), callbackContext);
-            } else {
+            }
+            else 
+            {
                 fail();
                 return false;
             }
@@ -151,13 +156,18 @@ public class SocialVk extends CordovaPlugin {
         } else if (ACTION_WALL_POST.equals(action)) {
             String message = args.optString(0);
             JSONObject params = args.optJSONObject(0);
-            if(message != null) {
+            if(params != null)
+            {
+                return wallPost(VKJsonHelper.toMap(params), callbackContext);
+            } 
+            else if (message != null)
+            {
                 HashMap<String, Object> paramsMap = new HashMap<String, Object>();
                 paramsMap.put("message", message);
                 return wallPost(paramsMap, callbackContext);
-            } else if (params != null) {
-                return wallPost(VKJsonHelper.toMap(params), callbackContext);
-            } else {
+            }
+            else
+            {
                 fail();
                 return false;
             }
