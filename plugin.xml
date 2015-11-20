@@ -76,5 +76,17 @@
     <framework src="src/android/vksdk_library" custom="true" />
     <source-file src="src/android/SocialVk.java" target-dir="src/ru/trilan/socialvk/" />
   </platform>
+  
+  <!-- winphone8 -->
+  <platform name="wp8">
+    <config-file target="config.xml" parent="/*">
+      <feature name="SocialVk">
+        <param name="wp8-package" value="SocialVk"/>
+      </feature>
+    </config-file>
+    <framework src="src/wp/Newtonsoft.Json.dll" custom="true"/>
+    <framework src="src/wp/VK.WindowsPhone.SDK.dll" custom="true"/>
+    <source-file src="src/wp/SocialVk.cs"/>
+  </platform>
 
 </plugin>
