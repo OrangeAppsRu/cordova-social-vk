@@ -81,8 +81,11 @@
   <platform name="wp8">
     <config-file target="config.xml" parent="/*">
       <feature name="SocialVk">
-        <param name="wp8-package" value="SocialVk"/>
+        <param name="wp-package" value="SocialVk"/>
       </feature>
+    </config-file>
+    <config-file target="Properties/WMAppManifest.xml" parent="/Deployment/App/Extensions">
+      <Protocol Name="vk$VK_APP_ID" NavUriFragment="encodedLaunchUri=%s" TaskID="_default" />
     </config-file>
     <framework src="src/wp/Newtonsoft.Json.dll" custom="true"/>
     <framework src="src/wp/VK.WindowsPhone.SDK.dll" custom="true"/>
