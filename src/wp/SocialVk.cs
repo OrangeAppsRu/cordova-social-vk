@@ -100,15 +100,15 @@ namespace WPCordovaClassLib.Cordova.Commands
         public void users_search(string par)
         {
             string[] options = JsonHelper.Deserialize<string[]>(par);
-            JObject p = JObject.Parse(options[0]);
-            var dict = p.ToObject<Dictionary<string, string>>();
             VKRequestParameters vkrp;
-            if(dict != null) {
+            try {
+                JObject p = JObject.Parse(options[0]);
+                var dict = p.ToObject<Dictionary<string, string>>();
                 vkrp = new VKRequestParameters("users.search", dict);
-            } else {
-                vkrp = new VKRequestParameters("users.search", "q", p.ToString());
+            } catch(Exception e) {
+                vkrp = new VKRequestParameters("users.search", "q", options[0]);
             }
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -124,7 +124,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("users.isAppUser", "user_id", options[0]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -132,7 +132,8 @@ namespace WPCordovaClassLib.Cordova.Commands
                                 } else {
                                     DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, res.ResultString), options.Last<string>());
                                 }
-                            });
+                            },
+                            (json) => new Object());
         }
 
         public void users_getSubscriptions(string par)
@@ -140,7 +141,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("users.getSubscriptions", "user_id", options[0], "extended", options[1], "offset", options[2], "count", options[3], "fields", options[4]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -156,7 +157,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("users.getFollowers", "user_id", options[0], "offset", options[1], "count", options[2], "fields", options[3], "name_case", options[4]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -171,15 +172,17 @@ namespace WPCordovaClassLib.Cordova.Commands
         {
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKPublishInputData data = new VKPublishInputData();
-            JObject p = JObject.Parse(options[0]);
-            var dict = p.ToObject<Dictionary<string, string>>();
-            if (dict != null) {
+            try {
+                JObject p = JObject.Parse(options[0]);
+                var dict = p.ToObject<Dictionary<string, string>>();
                 data.Text = dict["message"];
                 // TODO links and images
-            } else {
+            } catch (Exception e) {
                 data.Text = options[0];
             }
-            VKSDK.Publish(data);
+            DispatchInvoke(() => {
+                VKSDK.Publish(data);
+            });
         }
 
         public void photos_getUploadServer(string par)
@@ -187,7 +190,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("photos.getUploadServer", "album_id", options[0], "group_id", options[1]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -203,7 +206,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("photos.getWallUploadServer", "group_id", options[0]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -229,7 +232,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("friends.get", "user_id", options[0], "order", options[1], "count", options[2], "offset", options[3], "fields", options[4], "name_case", options[5]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -245,7 +248,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("friends.getOnline", "user_id", options[0], "order", options[1], "count", options[2], "offset", options[3]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -261,7 +264,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("friends.getMutual", "source_uid", options[0], "target_uid", options[1], "order", options[2], "count", options[3], "offset", options[4]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -277,7 +280,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("friends.getRecent", "count", options[0]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -293,7 +296,7 @@ namespace WPCordovaClassLib.Cordova.Commands
             string[] options = JsonHelper.Deserialize<string[]>(par);
             VKRequestParameters vkrp;
             vkrp = new VKRequestParameters("friends.getRequests", "offset", options[0], "count", options[1], "extended", options[2], "needs_mutual", options[3], "out", options[4], "sort", options[5], "suggested", options[6]);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
@@ -307,11 +310,16 @@ namespace WPCordovaClassLib.Cordova.Commands
         public void callApiMethod(string par)
         {
             string[] options = JsonHelper.Deserialize<string[]>(par);
-            JObject p = JObject.Parse(options[1]);
-            var dict = p.ToObject<Dictionary<string, string>>();
-            VKRequestParameters vkrp;
-            vkrp = new VKRequestParameters(options[0], dict);
-            VKRequest.Dispatch<List<VKUser>>(
+            VKRequestParameters vkrp = null;
+            try {
+                JObject p = JObject.Parse(options[1]);
+                var dict = p.ToObject<Dictionary<string, string>>();
+                vkrp = new VKRequestParameters(options[0], dict);
+            } catch (Exception e) {
+
+            }
+            if(vkrp != null)
+            VKRequest.Dispatch<object>(
                             vkrp,
                             (res) => {
                                 if (res.ResultCode == VKResultCode.Succeeded) {
