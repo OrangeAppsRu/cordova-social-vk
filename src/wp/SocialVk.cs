@@ -219,12 +219,58 @@ namespace WPCordovaClassLib.Cordova.Commands
 
         public void photos_saveWallPhoto(string par)
         {
-            DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Not implemented"));
+            string[] options = JsonHelper.Deserialize<string[]>(par);
+            long userId = long.Parse(options[1]);
+            long groupdId = long.Parse(options[2]);
+            byte[] bytes;
+            int comma = options[0].IndexOf(',');
+            if (comma >= 0) {
+                bytes = Convert.FromBase64String(options[0].Substring(comma+1));
+            } else {
+                bytes = Convert.FromBase64String(options[0]);
+            }
+            var ms = new MemoryStream(bytes, 0, bytes.Length);
+            VKUploadRequest req = VKUploadRequest.CreatePhotoWallUploadRequest(userId);
+            req.Dispatch(ms, (progress) => {
+            }, (res) => {
+                if(res.ResultCode == VKResultCode.Succeeded) {
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK, res.ResultString), options.Last<string>());
+                } else {
+                    string errtext;
+                    if (res.ResultString != null) errtext = res.ResultString;
+                    else if (res.Error != null) errtext = res.Error.error_msg;
+                    else errtext = "Unknown error";
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, errtext), options.Last<string>());
+                }
+            });
         }
 
-        public void photos_save(string par)
+        public void photos_save(string par) 
         {
-            DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Not implemented"));
+            string[] options = JsonHelper.Deserialize<string[]>(par);
+            long albumId = long.Parse(options[1]);
+            long groupdId = long.Parse(options[2]);
+            byte[] bytes;
+            int comma = options[0].IndexOf(',');
+            if (comma >= 0) {
+                bytes = Convert.FromBase64String(options[0].Substring(comma+1));
+            } else {
+                bytes = Convert.FromBase64String(options[0]);
+            }
+            var ms = new MemoryStream(bytes, 0, bytes.Length);
+            VKUploadRequest req = VKUploadRequest.CreatePhotoAlbumUploadRequest(albumId, groupdId);
+            req.Dispatch(ms, (progress) => {
+            }, (res) => {
+                if (res.ResultCode == VKResultCode.Succeeded) {
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK, res.ResultString), options.Last<string>());
+                } else {
+                    string errtext;
+                    if (res.ResultString != null) errtext = res.ResultString;
+                    else if (res.Error != null) errtext = res.Error.error_msg;
+                    else errtext = "Unknown error";
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, errtext), options.Last<string>());
+                }
+            });
         }
 
         public void friends_get(string par)
