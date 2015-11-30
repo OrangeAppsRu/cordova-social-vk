@@ -92,4 +92,13 @@
     <source-file src="src/wp/SocialVk.cs"/>
   </platform>
 
+  <platform name="windows">
+    <js-module src="src/windows/SocialVk.js" name="SocialVk">
+      <runs/>
+    </js-module>
+    <framework src="src/wp/Newtonsoft.Json.dll" custom="true"/>
+    <framework src="src/wp/VK.WindowsPhone.SDK.dll" custom="true"/>
+    <framework src="src/windows/SocialVk.winmd" custom="true"/>
+  </platform>
+
 </plugin>
