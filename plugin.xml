@@ -14,12 +14,12 @@
   <license>Apache 2.0 License</license>
   <author>DrMoriarty</author>
   <keywords>cordova,phonegap,vkontakte,sharing</keywords>
-  <js-module src="www/social-vk.js" name="SocialVk">
-    <clobbers target="SocialVk" />
-  </js-module>
   <preference name="VK_APP_ID" />
   <!-- ios -->
   <platform name="ios">
+    <js-module src="www/social-vk.js" name="SocialVk">
+      <clobbers target="SocialVk" />
+    </js-module>
     <info>
       You need to register VKontakte application first.
     </info>
@@ -54,6 +54,9 @@
 
   <!-- android -->
   <platform name="android">
+    <js-module src="www/social-vk.js" name="SocialVk">
+      <clobbers target="SocialVk" />
+    </js-module>
     <!--info>
       You should add 'android.library.reference.2=vksdk_library' to project.properties
     </info-->
@@ -79,6 +82,9 @@
   
   <!-- winphone8 -->
   <platform name="wp8">
+    <js-module src="www/social-vk.js" name="SocialVk">
+      <clobbers target="SocialVk" />
+    </js-module>
     <config-file target="config.xml" parent="/*">
       <feature name="SocialVk">
         <param name="wp-package" value="SocialVk"/>
@@ -94,11 +100,11 @@
 
   <platform name="windows">
     <js-module src="src/windows/SocialVk.js" name="SocialVk">
-      <runs/>
+      <clobbers target="SocialVk" />
     </js-module>
     <framework src="src/wp/Newtonsoft.Json.dll" custom="true"/>
-    <framework src="src/wp/VK.WindowsPhone.SDK.dll" custom="true"/>
-    <framework src="src/windows/SocialVk.winmd" custom="true"/>
+    <framework src="src/windows/VK.WindowsPhone.SDK-XAML.dll" custom="true"/>
+    <framework src="src/windows/Social.winmd" custom="true"/>
   </platform>
 
 </plugin>
