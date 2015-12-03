@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialVk", "WindowsRuntimeComponent1\SocialVk.csproj", "{14CA67CA-03BD-49A4-B0FA-88156243749F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialVk", "SocialVk\SocialVk.csproj", "{14CA67CA-03BD-49A4-B0FA-88156243749F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VK.WindowsPhone.SDK-XAML", "VK.WindowsPhone.SDK-XAML\VK.WindowsPhone.SDK-XAML.csproj", "{A7E0FC88-A513-4981-8C2A-0106045E695B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{14CA67CA-03BD-49A4-B0FA-88156243749F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14CA67CA-03BD-49A4-B0FA-88156243749F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14CA67CA-03BD-49A4-B0FA-88156243749F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7E0FC88-A513-4981-8C2A-0106045E695B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7E0FC88-A513-4981-8C2A-0106045E695B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7E0FC88-A513-4981-8C2A-0106045E695B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7E0FC88-A513-4981-8C2A-0106045E695B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

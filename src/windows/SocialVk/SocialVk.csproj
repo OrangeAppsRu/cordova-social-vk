@@ -46,9 +46,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="VK.WindowsPhone.SDK-XAML">
-      <HintPath>..\VK.WindowsPhone.SDK-XAML.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VK.WindowsPhone.SDK-XAML\VK.WindowsPhone.SDK-XAML.csproj">
+      <Project>{a7e0fc88-a513-4981-8c2a-0106045e695b}</Project>
+      <Name>VK.WindowsPhone.SDK-XAML</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

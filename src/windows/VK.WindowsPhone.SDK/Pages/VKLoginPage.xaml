@@ -1,0 +1,25 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="VK.WindowsPhone.SDK.Pages.VKLoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:localization="clr-namespace:VK.WindowsPhone.SDK.Localization"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="PortraitOrLandscape" Orientation="None"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+    <phone:PhoneApplicationPage.Resources>
+        <localization:VKLocalizedStrings x:Key="LocalizedStrings"/>
+    </phone:PhoneApplicationPage.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="White">
+        <ProgressBar x:Name="progressBar" IsIndeterminate="True"></ProgressBar>
+        <TextBlock x:Name="errorTextBlock" Visibility="Collapsed" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Path=LocalizedResources.Error, Source={StaticResource LocalizedStrings}}"/>
+        <phone:WebBrowser x:Name="webBrowser" Visibility="Collapsed" IsScriptEnabled="True"/>
+    </Grid>
+</phone:PhoneApplicationPage>

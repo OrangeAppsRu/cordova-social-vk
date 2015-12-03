@@ -1,0 +1,69 @@
+﻿<Pages:VKPopupControlBase
+    x:Class="VK.WindowsPhone.SDK_XAML.Pages.VKCaptchaRequestUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VK.WindowsPhone.SDK_XAML.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:localization="using:VK.WindowsPhone.SDK_XAML.Strings" 
+    xmlns:Pages="using:VK.WindowsPhone.SDK_XAML.Pages"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <localization:VKLocalizedStrings x:Key="LocalizedStrings" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid  x:Name="LayoutRoot"
+           Background="Transparent">
+            <Border VerticalAlignment="Top"          
+                BorderThickness="{StaticResource PhoneBorderThickness}"
+                Background="{StaticResource PhoneBackgroundBrush}"
+                Height="300"
+                Width="300">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="55" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+
+
+                    <!--ContentPanel - place additional content here-->
+                    <Grid x:Name="ContentPanel"
+                      Grid.Row="1"
+                      Margin="12,24,12,0">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=LocalizedResources.Captcha_RequiredText, Source={StaticResource LocalizedStrings}}"
+                                   HorizontalAlignment="Center"
+                                    />
+
+                            <Image HorizontalAlignment="Center"
+                               Height="40"
+                               Stretch="Uniform"
+                               Margin="0,12,0,0"
+                               VerticalAlignment="Center"
+                               Name="imageCaptcha" />
+
+                            <TextBox Name="textBoxCaptcha"
+                                 Margin="0,12,0,0" 
+                                 KeyDown="textBoxCaptcha_KeyDown"/>
+
+                            <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                                <Button Content="{Binding Path=LocalizedResources.Captcha_Send, Source={StaticResource LocalizedStrings}}"
+                                    Width="128"
+                                    Click="SendButton_Click"
+                                    Margin="0,16,16,0" />
+                                <Button Content="{Binding LocalizedResources.Captcha_Cancel, Source={StaticResource LocalizedStrings}}"
+                                    Width="128"
+                                    Click="CancelButton_Click"
+                                    Margin="0,16,0,0" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Pages:VKPopupControlBase>

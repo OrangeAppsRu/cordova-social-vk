@@ -65,6 +65,7 @@ namespace Social
             VKSDK.Initialize(appId);
             VKSDK.WakeUpSession();
 
+            Debug.WriteLine("VK plugin inited!");
             sendResult(cbid, "VK Plugin inited");
         }
 
@@ -79,8 +80,9 @@ namespace Social
                 Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                     () =>
                         {
-                            sendResult(cbid, "", "Threading test");
-                            VKSDK.Authorize(scope, false, false);
+                            string err = VKSDK.Authorize(scope, false, false);
+                            if (err != null)
+                                sendResult(cbid, "", err);
                         }
                 );
             }
