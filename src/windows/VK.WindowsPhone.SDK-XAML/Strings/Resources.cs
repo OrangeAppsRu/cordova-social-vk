@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 
-namespace VK.WindowsPhone.SDK_XAML.Strings
+namespace VK.WindowsPhone.SDK.Strings
 {
     public class Resources
     {

@@ -8,7 +8,7 @@ using VK.WindowsPhone.SDK;
 using VK.WindowsPhone.SDK.API;
 using VK.WindowsPhone.SDK.API.Model;
 using VK.WindowsPhone.SDK.Util;
-using VK.WindowsPhone.SDK_XAML.Pages;
+using VK.WindowsPhone.SDK.Pages;
 using Social.Cordova.JSON;
 using System.IO;
 using System.Diagnostics;
@@ -40,8 +40,13 @@ namespace Social
         }
 
         public void test1(string args, int cbid) {
-            string res = "input " + args;
-            if (callback != null) callback(this, new EventArgs() {callbackid = cbid, result = res, error = "" });
+            try {
+                string res = "input " + args;
+                VKCaptchaRequestUserControl cap = new VKCaptchaRequestUserControl();
+                if (callback != null) callback(this, new EventArgs() { callbackid = cbid, result = res, error = "" });
+            } catch(Exception e) {
+                sendResult(cbid, "", e.ToString());
+            }
         }
 
         public void init(string appId, int cbid) {

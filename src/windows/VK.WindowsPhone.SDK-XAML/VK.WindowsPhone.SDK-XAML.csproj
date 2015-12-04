@@ -8,7 +8,7 @@
     <ProjectGuid>{A7E0FC88-A513-4981-8C2A-0106045E695B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VK.WindowsPhone.SDK_XAML</RootNamespace>
+    <RootNamespace>VK.WindowsPhone.SDK</RootNamespace>
     <AssemblyName>VK.WindowsPhone.SDK-XAML</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

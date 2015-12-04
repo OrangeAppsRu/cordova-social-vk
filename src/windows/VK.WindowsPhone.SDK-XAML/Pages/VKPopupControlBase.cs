@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 
-namespace VK.WindowsPhone.SDK_XAML.Pages
+namespace VK.WindowsPhone.SDK.Pages
 {
     public class VKPopupControlBase  : UserControl
     {

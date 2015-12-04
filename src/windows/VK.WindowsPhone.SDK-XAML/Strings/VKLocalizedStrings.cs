@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VK.WindowsPhone.SDK_XAML.Strings
+namespace VK.WindowsPhone.SDK.Strings
 {
     public class VKLocalizedStrings
     {

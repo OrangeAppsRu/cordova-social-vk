@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 
 
-namespace VK.WindowsPhone.SDK_XAML.Pages
+namespace VK.WindowsPhone.SDK.Pages
 {
     public sealed partial class VKCaptchaRequestUserControl
     {

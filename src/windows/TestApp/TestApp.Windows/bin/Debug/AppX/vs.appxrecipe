@@ -22,21 +22,21 @@
     <AppXManifest Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2015-12-04T10:51:31.906</Modified>
+      <Modified>2015-12-04T11:14:58.916</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\TestApp.Windows.exe">
       <PackagePath>TestApp.Windows.exe</PackagePath>
-      <Modified>2015-12-04T10:51:29.162</Modified>
+      <Modified>2015-12-04T11:14:52.143</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Social.winmd">
       <PackagePath>Social.winmd</PackagePath>
-      <Modified>2015-12-04T10:51:27.411</Modified>
+      <Modified>2015-12-04T11:14:49.556</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.dll">
       <PackagePath>VK.WindowsPhone.SDK-XAML.dll</PackagePath>
-      <Modified>2015-12-03T14:35:22.609</Modified>
+      <Modified>2015-12-04T11:14:46.841</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Newtonsoft.Json.dll">
       <PackagePath>Newtonsoft.Json.dll</PackagePath>
@@ -68,27 +68,27 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\VK.WindowsPhone.SDK-XAML.xr.xml">
       <PackagePath>VK.WindowsPhone.SDK-XAML\VK.WindowsPhone.SDK-XAML.xr.xml</PackagePath>
-      <Modified>2015-12-03T14:35:21.898</Modified>
+      <Modified>2015-12-04T11:14:45.694</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2015-12-03T14:35:26.245</Modified>
+      <Modified>2015-12-04T11:14:51.908</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2015-12-03T14:42:25.167</Modified>
+      <Modified>2015-12-04T11:14:51.917</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\Pages\VKCaptchaRequestUserControl.xbf">
       <PackagePath>VK.WindowsPhone.SDK-XAML\Pages\VKCaptchaRequestUserControl.xbf</PackagePath>
-      <Modified>2015-12-03T14:35:21.941</Modified>
+      <Modified>2015-12-04T11:14:45.988</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\Pages\VKLoginUserControl.xbf">
       <PackagePath>VK.WindowsPhone.SDK-XAML\Pages\VKLoginUserControl.xbf</PackagePath>
-      <Modified>2015-12-03T14:35:21.943</Modified>
+      <Modified>2015-12-04T11:14:46.042</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2015-12-03T14:35:27.191</Modified>
+      <Modified>2015-12-04T11:14:53.572</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

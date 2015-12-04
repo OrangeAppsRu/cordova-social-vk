@@ -10,7 +10,7 @@ using Microsoft.Phone.Controls;
 
 #endif
 using VK.WindowsPhone.SDK.API;
-using VK.WindowsPhone.SDK_XAML.Pages;
+using VK.WindowsPhone.SDK.Pages;
 using VK.WindowsPhone.SDK.Util;
 using System.Net;
 
