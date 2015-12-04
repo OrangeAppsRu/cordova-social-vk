@@ -8,7 +8,7 @@ using VK.WindowsPhone.SDK;
 using VK.WindowsPhone.SDK.API;
 using VK.WindowsPhone.SDK.API.Model;
 using VK.WindowsPhone.SDK.Util;
-using VK.WindowsPhone.SDK.Pages;
+using VK.WindowsPhone.SDK_XAML.Pages;
 using Social.Cordova.JSON;
 using System.IO;
 using System.Diagnostics;
@@ -80,9 +80,13 @@ namespace Social
                 Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                     () =>
                         {
-                            string err = VKSDK.Authorize(scope, false, false);
-                            if (err != null)
-                                sendResult(cbid, "", err);
+                            try {
+                                string err = VKSDK.Authorize(scope, false, false);
+                                if (err != null)
+                                    sendResult(cbid, "", err);
+                            } catch (Exception e) {
+                                sendResult(cbid, "", e.ToString());
+                            }
                         }
                 );
             }
@@ -94,7 +98,7 @@ namespace Social
 
         public void logout(int cbid) {
             VKSDK.Logout();
-            sendResult(cbid, "Logout comleted");
+            sendResult(cbid, "Logout completed");
         }
 
         public void users_get(string user_ids, string fields, string name_case, int cbid) {

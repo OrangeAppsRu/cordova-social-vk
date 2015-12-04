@@ -23,3 +23,10 @@ C:\Users\Василий\vk-windowsphone-sdk\VK.WindowsPhone.SDK\obj\Debug\VK.Win
 C:\Users\Василий\vk-windowsphone-sdk\VK.WindowsPhone.SDK\obj\Debug\ru-RU\VK.WindowsPhone.SDK.resources.dll
 C:\Users\Василий\vk-windowsphone-sdk\VK.WindowsPhone.SDK\obj\Debug\VK.WindowsPhone.SDK.dll
 C:\Users\Василий\vk-windowsphone-sdk\VK.WindowsPhone.SDK\obj\Debug\VK.WindowsPhone.SDK.pdb
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\Pages\VKCaptchaRequestControl.g.cs
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\Pages\VKLoginPage.g.cs
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\Pages\VKPublishPage.g.cs
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\VK.WindowsPhone.SDK.g.resources
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\VK.WindowsPhone.SDK.Localization.Resources.resources
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\VK.WindowsPhone.SDK.Localization.Resources.ru-RU.resources
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK\obj\Debug\VK.WindowsPhone.SDK.csproj.GenerateResource.Cache

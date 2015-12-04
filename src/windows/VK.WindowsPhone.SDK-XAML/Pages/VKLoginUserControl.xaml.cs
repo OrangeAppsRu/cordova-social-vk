@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using VK.WindowsPhone.SDK.Util;
 
-namespace VK.WindowsPhone.SDK.Pages
+namespace VK.WindowsPhone.SDK_XAML.Pages
 {
     public sealed partial class VKLoginUserControl
     {

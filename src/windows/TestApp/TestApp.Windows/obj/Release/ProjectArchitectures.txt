@@ -1,0 +1,3 @@
+C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\SocialVk.csproj;neutral
+C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\TestApp.Windows.csproj;neutral
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\VK.WindowsPhone.SDK-XAML.csproj;neutral

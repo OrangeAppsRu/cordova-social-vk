@@ -133,7 +133,7 @@ namespace VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo
             _typeNameTable[4] = "Object";
             _typeNameTable[5] = "VK.WindowsPhone.SDK_XAML.Strings.Resources";
             _typeNameTable[6] = "VK.WindowsPhone.SDK_XAML.Pages.VKCaptchaRequestUserControl";
-            _typeNameTable[7] = "VK.WindowsPhone.SDK.Pages.VKLoginUserControl";
+            _typeNameTable[7] = "VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl";
             _typeNameTable[8] = "String";
             _typeNameTable[9] = "System.Collections.Generic.List`1<String>";
 
@@ -145,7 +145,7 @@ namespace VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo
             _typeTable[4] = typeof(global::System.Object);
             _typeTable[5] = typeof(global::VK.WindowsPhone.SDK_XAML.Strings.Resources);
             _typeTable[6] = typeof(global::VK.WindowsPhone.SDK_XAML.Pages.VKCaptchaRequestUserControl);
-            _typeTable[7] = typeof(global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl);
+            _typeTable[7] = typeof(global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl);
             _typeTable[8] = typeof(global::System.String);
             _typeTable[9] = typeof(global::System.Collections.Generic.List<global::System.String>);
         }
@@ -186,7 +186,7 @@ namespace VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo
         private object Activate_3_VKLocalizedStrings() { return new global::VK.WindowsPhone.SDK_XAML.Strings.VKLocalizedStrings(); }
         private object Activate_5_Resources() { return new global::VK.WindowsPhone.SDK_XAML.Strings.Resources(); }
         private object Activate_6_VKCaptchaRequestUserControl() { return new global::VK.WindowsPhone.SDK_XAML.Pages.VKCaptchaRequestUserControl(); }
-        private object Activate_7_VKLoginUserControl() { return new global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl(); }
+        private object Activate_7_VKLoginUserControl() { return new global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl(); }
         private object Activate_9_List() { return new global::System.Collections.Generic.List<global::System.String>(); }
         private void VectorAdd_9_List(object instance, object item)
         {
@@ -247,7 +247,7 @@ namespace VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 7:   //  VK.WindowsPhone.SDK.Pages.VKLoginUserControl
+            case 7:   //  VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl
                 userType = new global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("VK.WindowsPhone.SDK_XAML.Pages.VKPopupControlBase"));
                 userType.Activator = Activate_7_VKLoginUserControl;
                 userType.AddMemberName("ValidationUri");
@@ -289,32 +289,32 @@ namespace VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo
         }
         private object get_2_VKLoginUserControl_ValidationUri(object instance)
         {
-            var that = (global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl)instance;
+            var that = (global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl)instance;
             return that.ValidationUri;
         }
         private void set_2_VKLoginUserControl_ValidationUri(object instance, object Value)
         {
-            var that = (global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl)instance;
+            var that = (global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl)instance;
             that.ValidationUri = (global::System.String)Value;
         }
         private object get_3_VKLoginUserControl_Scopes(object instance)
         {
-            var that = (global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl)instance;
+            var that = (global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl)instance;
             return that.Scopes;
         }
         private void set_3_VKLoginUserControl_Scopes(object instance, object Value)
         {
-            var that = (global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl)instance;
+            var that = (global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl)instance;
             that.Scopes = (global::System.Collections.Generic.List<global::System.String>)Value;
         }
         private object get_4_VKLoginUserControl_Revoke(object instance)
         {
-            var that = (global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl)instance;
+            var that = (global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl)instance;
             return that.Revoke;
         }
         private void set_4_VKLoginUserControl_Revoke(object instance, object Value)
         {
-            var that = (global::VK.WindowsPhone.SDK.Pages.VKLoginUserControl)instance;
+            var that = (global::VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl)instance;
             that.Revoke = (global::System.Boolean)Value;
         }
 
@@ -337,20 +337,20 @@ namespace VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo
                 xamlMember.Getter = get_1_VKLocalizedStrings_LocalizedResources;
                 xamlMember.SetIsReadOnly();
                 break;
-            case "VK.WindowsPhone.SDK.Pages.VKLoginUserControl.ValidationUri":
-                userType = (global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType)GetXamlTypeByName("VK.WindowsPhone.SDK.Pages.VKLoginUserControl");
+            case "VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl.ValidationUri":
+                userType = (global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType)GetXamlTypeByName("VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl");
                 xamlMember = new global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlMember(this, "ValidationUri", "String");
                 xamlMember.Getter = get_2_VKLoginUserControl_ValidationUri;
                 xamlMember.Setter = set_2_VKLoginUserControl_ValidationUri;
                 break;
-            case "VK.WindowsPhone.SDK.Pages.VKLoginUserControl.Scopes":
-                userType = (global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType)GetXamlTypeByName("VK.WindowsPhone.SDK.Pages.VKLoginUserControl");
+            case "VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl.Scopes":
+                userType = (global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType)GetXamlTypeByName("VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl");
                 xamlMember = new global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlMember(this, "Scopes", "System.Collections.Generic.List`1<String>");
                 xamlMember.Getter = get_3_VKLoginUserControl_Scopes;
                 xamlMember.Setter = set_3_VKLoginUserControl_Scopes;
                 break;
-            case "VK.WindowsPhone.SDK.Pages.VKLoginUserControl.Revoke":
-                userType = (global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType)GetXamlTypeByName("VK.WindowsPhone.SDK.Pages.VKLoginUserControl");
+            case "VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl.Revoke":
+                userType = (global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlUserType)GetXamlTypeByName("VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl");
                 xamlMember = new global::VK.WindowsPhone.SDK_XAML.VK_WindowsPhone_SDK_XAML_XamlTypeInfo.XamlMember(this, "Revoke", "Boolean");
                 xamlMember.Getter = get_4_VKLoginUserControl_Revoke;
                 xamlMember.Setter = set_4_VKLoginUserControl_Revoke;

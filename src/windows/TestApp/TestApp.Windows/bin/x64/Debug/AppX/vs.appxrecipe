@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>СБОРОЧНАЯ</Machine>
+    <WindowsUser>Василий</WindowsUser>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetOsVersion>6.3</TargetOsVersion>
+    <TargetOsDescription>Windows 8.1</TargetOsDescription>
+    <SolutionConfiguration>Debug|x64</SolutionConfiguration>
+    <PackageArchitecture>x64</PackageArchitecture>
+    <PackageIdentityName>cf38700c-7c77-49b5-a3ba-fa2d43f6990a</PackageIdentityName>
+    <IntermediateOutputPath>C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\obj\x64\Debug\</IntermediateOutputPath>
+    <RegisteredManifestChecksum>5A477D0413D223585D95051721B3FDB965357CAFEE9B7C3BF3B4551E381F841D</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>cf38700c-7c77-49b5-a3ba-fa2d43f6990a_1.0.0.0_x64__jyapf1j1jg8z0</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>cf38700c-7c77-49b5-a3ba-fa2d43f6990a_jyapf1j1jg8z0!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>cf38700c-7c77-49b5-a3ba-fa2d43f6990a</RegisteredPackageID>
+    <RegisteredPackagePublisher>CN=Василий</RegisteredPackagePublisher>
+    <RegisteredVersion>1.0.0.0</RegisteredVersion>
+    <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-12-03T12:38:57.280</Modified>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\TestApp.Windows.exe">
+      <PackagePath>TestApp.Windows.exe</PackagePath>
+      <Modified>2015-12-03T12:38:46.967</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Social.winmd">
+      <PackagePath>Social.winmd</PackagePath>
+      <Modified>2015-12-03T11:52:35.549</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.dll">
+      <PackagePath>VK.WindowsPhone.SDK-XAML.dll</PackagePath>
+      <Modified>2015-12-03T09:53:55.638</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Newtonsoft.Json.dll">
+      <PackagePath>Newtonsoft.Json.dll</PackagePath>
+      <Modified>2015-11-20T11:11:05.860</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\Logo.scale-100.png">
+      <PackagePath>Assets\Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-07-06T18:01:10.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\SmallLogo.scale-100.png">
+      <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-07-06T18:01:10.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\SplashScreen.scale-100.png">
+      <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-07-06T18:01:10.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\StoreLogo.scale-100.png">
+      <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2015-07-06T18:01:10.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\TestApp.Windows.xr.xml">
+      <PackagePath>TestApp.Windows.xr.xml</PackagePath>
+      <Modified>2015-12-03T12:38:46.702</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\VK.WindowsPhone.SDK-XAML.xr.xml">
+      <PackagePath>VK.WindowsPhone.SDK-XAML\VK.WindowsPhone.SDK-XAML.xr.xml</PackagePath>
+      <Modified>2015-12-03T09:53:54.654</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\App.xbf">
+      <PackagePath>App.xbf</PackagePath>
+      <Modified>2015-12-03T12:38:46.780</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\MainPage.xbf">
+      <PackagePath>MainPage.xbf</PackagePath>
+      <Modified>2015-12-03T12:38:46.780</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\Pages\VKCaptchaRequestUserControl.xbf">
+      <PackagePath>VK.WindowsPhone.SDK-XAML\Pages\VKCaptchaRequestUserControl.xbf</PackagePath>
+      <Modified>2015-12-03T09:53:55.310</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\Pages\VKLoginUserControl.xbf">
+      <PackagePath>VK.WindowsPhone.SDK-XAML\Pages\VKLoginUserControl.xbf</PackagePath>
+      <Modified>2015-12-03T09:53:55.326</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <Modified>2015-12-03T12:38:54.967</Modified>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

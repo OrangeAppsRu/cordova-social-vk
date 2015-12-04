@@ -3,6 +3,8 @@ C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Social.
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Social.pri
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.dll
+C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.pdb
+C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.pri
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\SocialVk.csprojResolveAssemblyReference.cache
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\Social.winmd
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\Social.pdb
@@ -19,5 +21,3 @@ C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\pri.res
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\qualifiers.txt
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\qualifiers.txt.intermediate
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Debug\MultipleQualifiersPerDimensionFound.txt
-C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.pdb
-C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.pri

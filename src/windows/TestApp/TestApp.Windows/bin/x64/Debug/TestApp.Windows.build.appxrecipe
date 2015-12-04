@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>СБОРОЧНАЯ</Machine>
+    <WindowsUser>Василий</WindowsUser>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetOsVersion>6.3</TargetOsVersion>
+    <TargetOsDescription>Windows 8.1</TargetOsDescription>
+    <SolutionConfiguration>Debug|x64</SolutionConfiguration>
+    <PackageArchitecture>x64</PackageArchitecture>
+    <PackageIdentityName>cf38700c-7c77-49b5-a3ba-fa2d43f6990a</PackageIdentityName>
+    <IntermediateOutputPath>C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\obj\x64\Debug\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\TestApp.Windows.exe">
+      <PackagePath>TestApp.Windows.exe</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Social.winmd">
+      <PackagePath>Social.winmd</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.dll">
+      <PackagePath>VK.WindowsPhone.SDK-XAML.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Newtonsoft.Json.dll">
+      <PackagePath>Newtonsoft.Json.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\Logo.scale-100.png">
+      <PackagePath>Assets\Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\SmallLogo.scale-100.png">
+      <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\SplashScreen.scale-100.png">
+      <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\Assets\StoreLogo.scale-100.png">
+      <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\TestApp.Windows.xr.xml">
+      <PackagePath>TestApp.Windows.xr.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\VK.WindowsPhone.SDK-XAML.xr.xml">
+      <PackagePath>VK.WindowsPhone.SDK-XAML\VK.WindowsPhone.SDK-XAML.xr.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\App.xbf">
+      <PackagePath>App.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\MainPage.xbf">
+      <PackagePath>MainPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\Pages\VKCaptchaRequestUserControl.xbf">
+      <PackagePath>VK.WindowsPhone.SDK-XAML\Pages\VKCaptchaRequestUserControl.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Debug\Pages\VKLoginUserControl.xbf">
+      <PackagePath>VK.WindowsPhone.SDK-XAML\Pages\VKLoginUserControl.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\x64\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

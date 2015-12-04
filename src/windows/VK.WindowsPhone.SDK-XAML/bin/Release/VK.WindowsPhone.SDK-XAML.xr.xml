@@ -73,6 +73,6 @@
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressBar">
       <RootProperty Name="IsIndeterminate" />
     </RootType>
-    <RootType FullName="VK.WindowsPhone.SDK.Pages.VKLoginUserControl" />
+    <RootType FullName="VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl" />
   </Roots.RootTypes>
 </Roots>
