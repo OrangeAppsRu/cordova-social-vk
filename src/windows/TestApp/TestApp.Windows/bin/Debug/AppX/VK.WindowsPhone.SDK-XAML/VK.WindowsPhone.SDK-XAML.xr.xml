@@ -5,7 +5,6 @@
     <RootPropertyPathName Name="Captcha_Cancel" />
     <RootPropertyPathName Name="Captcha_Send" />
     <RootPropertyPathName Name="Captcha_RequiredText" />
-    <RootPropertyPathName Name="Error" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
     <RootType FullName="VK.WindowsPhone.SDK.Pages.VKPopupControlBase">
@@ -69,6 +68,9 @@
       <RootProperty Name="Path" />
     </RootType>
     <RootType FullName="VK.WindowsPhone.SDK.Pages.VKCaptchaRequestUserControl" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Page">
+      <RootProperty Name="Content" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.WebView" />
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressBar">
       <RootProperty Name="IsIndeterminate" />

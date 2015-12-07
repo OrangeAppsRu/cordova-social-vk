@@ -41,7 +41,10 @@ namespace VK.WindowsPhone.SDK.Util
                 var keyValueArray = keyValueString.Split('=');
                 if (keyValueArray.Length == 2)
                 {
-                    parameters.Add(keyValueArray[0], keyValueArray[1]);
+                    if (parameters.ContainsKey(keyValueArray[0]))
+                        parameters[keyValueArray[0]] = keyValueArray[1];
+                    else
+                        parameters.Add(keyValueArray[0], keyValueArray[1]);
                 }
             }
 

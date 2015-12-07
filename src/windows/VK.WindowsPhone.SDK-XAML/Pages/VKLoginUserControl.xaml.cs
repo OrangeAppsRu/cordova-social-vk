@@ -18,7 +18,7 @@ using VK.WindowsPhone.SDK.Util;
 
 namespace VK.WindowsPhone.SDK.Pages
 {
-    public sealed partial class VKLoginUserControl
+    public sealed partial class VKLoginUserControl : Page 
     {
         private const String REDIRECT_URL = "https://oauth.vk.com/blank.html";
 
@@ -29,6 +29,14 @@ namespace VK.WindowsPhone.SDK.Pages
         private bool _isValidating = false;
         private bool _processedResult = false;
         private string _validationUri;
+
+        private static List<VKLoginUserControl> _currentlyShownInstances = new List<VKLoginUserControl>();
+
+        public static List<VKLoginUserControl> CurrentlyShownInstances {
+            get {
+                return _currentlyShownInstances;
+            }
+        }
 
         private static VKLoginUserControl _currentlyShownInstance;
 
@@ -95,7 +103,7 @@ namespace VK.WindowsPhone.SDK.Pages
             this.InitializeComponent();
         }
 
-        protected override void PrepareForLoad()
+        protected void PrepareForLoad()
         {
             InitializeWebBrowser();
         }
@@ -148,13 +156,50 @@ namespace VK.WindowsPhone.SDK.Pages
             }
         }
 
-        protected override void OnClosing()
+        public bool IsShown {
+            get {
+                return _parentPopup.IsOpen;
+            }
+            set {
+                _parentPopup.IsOpen = value;
+
+                if (!value) {
+                    OnClosing();
+                    _currentlyShownInstances.Remove(this);
+                }
+            }
+        }
+
+        protected void OnClosing()
         {
-            base.OnClosing();
+            //base.OnClosing();
             if (!_processedResult)
             {
                 VKSDK.ProcessLoginResult(null, _isValidating, _validationCallback);  
             }
+        }
+
+        public void ShowInPopup(double? width = null, double? height = null) {
+            var popup = new Popup();
+            if (width.HasValue) {
+                popup.Width = width.Value;
+                this.Width = width.Value;
+            }
+            if (height.HasValue) {
+                popup.Height = height.Value;
+                this.Height = height.Value;
+            }
+
+            this._parentPopup = popup;
+
+            popup.Child = this;
+
+            popup.IsOpen = true;
+
+            _currentlyShownInstances.Add(this);
+
+            this.PrepareForLoad();
+
         }
     }
 }

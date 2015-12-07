@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -43,6 +44,18 @@ namespace TestApp
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e) {
+            Social.SocialVk vk = new Social.SocialVk();
+            vk.callback += Vk_callback;
+            vk.init("5027289", 1);
+            vk.login("[\"wall\", \"offline\", \"friends\", \"audio\", \"video\", \"photos\"]", 1);
+            //vk.test1("", 1);
+        }
+
+        private void Vk_callback(object sender, Social.EventArgs e) {
+            Debug.WriteLine("Callback: " + e.result + ", " + e.error);
         }
     }
 }

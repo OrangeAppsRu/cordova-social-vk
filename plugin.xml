@@ -98,10 +98,20 @@
     <source-file src="src/wp/SocialVk.cs"/>
   </platform>
 
+  <!-- universal windows-->
   <platform name="windows">
     <js-module src="src/windows/SocialVk.js" name="SocialVk">
       <clobbers target="SocialVk" />
     </js-module>
+    <source-file src="src/windows/VKConfig.xml" target-dir="../../"/>
+    <config-file target="VKConfig.xml" parent="/Extensions">
+        <Protocol Name="vk$VK_APP_ID" />
+    </config-file>
+    <config-file target="Package.appxmanifest" target-dir="/Package/Applications/Application/Extensions">
+      <Extension Category="windows.protocol"> 
+        <Protocol Name="vk$VK_APP_ID" m2:DesiredView="useLess"/> 
+      </Extension> 
+    </config-file>
     <framework src="src/wp/Newtonsoft.Json.dll" custom="true"/>
     <framework src="src/windows/VK.WindowsPhone.SDK-XAML.dll" custom="true"/>
     <framework src="src/windows/Social.winmd" custom="true"/>

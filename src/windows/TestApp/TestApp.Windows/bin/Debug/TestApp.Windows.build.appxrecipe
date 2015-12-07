@@ -46,6 +46,9 @@
       <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Shared\VKConfig.xml">
+      <PackagePath>VKConfig.xml</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\TestApp.Windows.xr.xml">
       <PackagePath>TestApp.Windows.xr.xml</PackagePath>
     </AppxPackagedFile>

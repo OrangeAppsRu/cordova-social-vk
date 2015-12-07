@@ -13,6 +13,9 @@ using Social.Cordova.JSON;
 using System.IO;
 using System.Diagnostics;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
+using Windows.ApplicationModel.Core;
+using Windows.ApplicationModel.Activation;
 
 namespace Social
 {
@@ -26,6 +29,7 @@ namespace Social
     {
         public event EventHandler<EventArgs> callback;
         private int lastCbId = 0;
+        private CoreDispatcher dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
 
         private void sendResult(int cbid = 0, string result = "", string error = "") {
             if (cbid <= 0) cbid = lastCbId;
@@ -46,6 +50,13 @@ namespace Social
                 if (callback != null) callback(this, new EventArgs() { callbackid = cbid, result = res, error = "" });
             } catch(Exception e) {
                 sendResult(cbid, "", e.ToString());
+            }
+        }
+
+        public static void OnActivated(IActivatedEventArgs args) {
+            if (args.Kind == ActivationKind.Protocol) {
+                var protocolArgs = args as ProtocolActivatedEventArgs;
+                VK.WindowsPhone.SDK_XAML.VKProtocolActivationHelper.HandleProtocolLaunch(protocolArgs);
             }
         }
 
@@ -75,25 +86,30 @@ namespace Social
         }
 
         public void login(string par, int cbid) {
-            lastCbId = cbid;
-            string[] _scope = JsonHelper.Deserialize<string[]>(par);
-            if(_scope == null) {
-                Debug.WriteLine("Empty permissions list");
-                sendResult(cbid, "", "Empty permissions list." + par);
-            } else {
-                List<String> scope = new List<string>(_scope);
-                Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    () =>
-                        {
+            try {
+                lastCbId = cbid;
+                string[] _scope = JsonHelper.Deserialize<string[]>(par);
+                if (_scope == null) {
+                    Debug.WriteLine("Empty permissions list");
+                    sendResult(cbid, "", "Empty permissions list." + par);
+                } else {
+                    List<String> scope = new List<string>(_scope);
+                    //Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    //Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    //    () =>
+                    //    {
                             try {
-                                string err = VKSDK.Authorize(scope, false, false);
+                                string err = VKSDK.Authorize(scope, false, false, LoginType.VKApp);
                                 if (err != null)
                                     sendResult(cbid, "", err);
                             } catch (Exception e) {
                                 sendResult(cbid, "", e.ToString());
                             }
-                        }
-                );
+                    //    }
+                    //);
+                }
+            } catch (Exception e) {
+                sendResult(cbid, "", e.ToString() + e.StackTrace + e.Message + e.Source);
             }
         }
 

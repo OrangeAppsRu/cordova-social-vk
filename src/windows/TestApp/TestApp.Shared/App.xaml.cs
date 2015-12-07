@@ -134,5 +134,10 @@ namespace TestApp
             // TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        protected override void OnActivated(IActivatedEventArgs args) {
+            base.OnActivated(args);
+            Social.SocialVk.OnActivated(args);
+        }
     }
 }
