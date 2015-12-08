@@ -22,21 +22,21 @@
     <AppXManifest Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2015-12-07T12:25:50.638</Modified>
+      <Modified>2015-12-08T11:09:13.078</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Windows\bin\Debug\TestApp.Windows.exe">
       <PackagePath>TestApp.Windows.exe</PackagePath>
-      <Modified>2015-12-07T12:25:43.143</Modified>
+      <Modified>2015-12-08T11:09:09.207</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Social.winmd">
       <PackagePath>Social.winmd</PackagePath>
-      <Modified>2015-12-07T12:25:41.605</Modified>
+      <Modified>2015-12-08T11:09:07.171</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\VK.WindowsPhone.SDK-XAML.dll">
       <PackagePath>VK.WindowsPhone.SDK-XAML.dll</PackagePath>
-      <Modified>2015-12-07T12:25:38.641</Modified>
+      <Modified>2015-12-08T07:31:09.424</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Debug\Newtonsoft.Json.dll">
       <PackagePath>Newtonsoft.Json.dll</PackagePath>

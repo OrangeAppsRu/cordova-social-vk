@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using VK.WindowsPhone.SDK;
 using VK.WindowsPhone.SDK.API;
 using VK.WindowsPhone.SDK.API.Model;
@@ -48,9 +49,11 @@ namespace Social
                 Debug.WriteLine("SocialVk: Wrong callback ID!");
                 return;
             }
-            if (callback != null)
+            if (callback != null) {
+                if (result == null) result = "null";
+                if (error == null) error = "null";
                 callback(this, new EventArgs() { callbackid = cbid, result = result, error = error });
-            else
+            } else
                 Debug.WriteLine("SocialVk: Callback not defined!");
         }
 
@@ -74,9 +77,21 @@ namespace Social
 
             VKSDK.AccessTokenReceived += (sender, arg) => {
                 Debug.WriteLine("Access token recieved " + arg);
-                JObject res = new JObject();
-                res.Add("token", arg.NewToken.AccessToken);
-                sendResult(0, res.ToString());
+                JObject result = new JObject();
+                result["token"] = arg.NewToken.AccessToken;
+                VKRequest.Dispatch<List<VKUser>>(
+                                new VKRequestParameters(
+                                    "users.get",
+                                    "fields", "id, nickname, first_name, last_name, sex, bdate, timezone, photo, photo_big, city, country"),
+                                (res) => {
+                                    if (res.ResultCode == VKResultCode.Succeeded) {
+                                        string user = JsonConvert.SerializeObject(res.Data[0]);
+                                        result["user"] = JObject.Parse(user);
+                                        sendResult(0, result.ToString());
+                                    } else {
+                                        sendResult(0, "", res.ResultString);
+                                    }
+                                });
             };
 
             VKSDK.CaptchaRequest = (VKCaptchaUserRequest captchaUserRequest, Action<VKCaptchaUserResponse> action) => {

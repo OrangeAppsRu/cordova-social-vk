@@ -8,7 +8,7 @@ module.exports = {
             self.vkobj.onActivated(arg.detail);
         });
         this.vkobj.addEventListener("callback", function (arg) {
-            console.log("Callback from SocialVk.", arg);
+            console.log("Callback from SocialVk.", arg.result, arg.error);
             cb = self.cbmap[arg.callbackid];
             delete self.cbmap[arg.callbackid];
             if (cb != null) {
@@ -17,14 +17,16 @@ module.exports = {
                 } else {
                     cb.success(arg.result);
                 }
+            } else {
+                console.log("Callback", arg.callbackid, "not found!");
             }
         });
         this.cbmap = {};
         this.nextCbId = 1;
         this.pushCallback = function (success, error) {
-            id = this.nextCbId;
-            this.nextCbId += 1;
-            this.cbmap[id] = { "success": success, "error": error };
+            id = self.nextCbId;
+            self.nextCbId += 1;
+            self.cbmap[id] = { "success": success, "error": error };
             return id;
         }
         this.vkobj.init(appId, this.pushCallback(success, error));

@@ -32,7 +32,7 @@ namespace TestApp
             Social.SocialVk vk = new Social.SocialVk();
             vk.callback += Vk_callback;
             vk.init("5027289", 1);
-            vk.login("[\"wall\", \"offline\", \"friends\", \"audio\", \"video\", \"photos\"]", 1);
+            vk.login("[\"wall\", \"offline\", \"friends\", \"audio\", \"video\", \"photos\"]", 2);
             //vk.test1("", 1);
         }
 
