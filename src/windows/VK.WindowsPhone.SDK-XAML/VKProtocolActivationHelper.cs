@@ -23,5 +23,18 @@ namespace VK.WindowsPhone.SDK_XAML
                  VKSDK.ProcessLoginResult(innerQueryParamsString, false, null);
              }
          }
+
+        public static void HandleWebProtocolLaunch(Windows.UI.WebUI.WebUIProtocolActivatedEventArgs protocolArgs) 
+        {
+            if (protocolArgs.Uri.OriginalString.StartsWith("vk") && protocolArgs.Uri.OriginalString.Contains("://authorize")) 
+            {
+                var launchUriDecoded = protocolArgs.Uri.ToString();
+                launchUriDecoded = launchUriDecoded.Replace("authorize/#", "authorize/?");
+
+                var innerQueryParamsString = VKUtil.GetParamsOfQueryString(launchUriDecoded);
+
+                VKSDK.ProcessLoginResult(innerQueryParamsString, false, null);
+            }
+        }
     }
 }

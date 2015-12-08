@@ -39,3 +39,4 @@ C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPho
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Debug\qualifiers.txt.intermediate
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Debug\ProjectArchitectures.txt
+C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Debug\VKConfig.xml

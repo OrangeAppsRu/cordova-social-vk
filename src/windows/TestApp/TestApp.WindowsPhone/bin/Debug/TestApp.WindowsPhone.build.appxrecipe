@@ -54,6 +54,9 @@
       <PackagePath>Assets\WideLogo.scale-240.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.Shared\VKConfig.xml">
+      <PackagePath>VKConfig.xml</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Debug\TestApp.WindowsPhone.xr.xml">
       <PackagePath>TestApp.WindowsPhone.xr.xml</PackagePath>
     </AppxPackagedFile>

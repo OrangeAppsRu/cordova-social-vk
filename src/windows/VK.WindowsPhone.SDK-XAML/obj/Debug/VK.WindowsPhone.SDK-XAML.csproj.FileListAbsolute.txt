@@ -28,3 +28,4 @@ C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\o
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Debug\qualifiers.txt
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Debug\qualifiers.txt.intermediate
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Debug\MultipleQualifiersPerDimensionFound.txt
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Debug\VK.WindowsPhone.SDK-XAML.csprojResolveAssemblyReference.cache

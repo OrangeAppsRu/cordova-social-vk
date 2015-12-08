@@ -137,7 +137,7 @@ namespace TestApp
 
         protected override void OnActivated(IActivatedEventArgs args) {
             base.OnActivated(args);
-            Social.SocialVk.OnActivated(args);
+            Social.SocialVk.Instance.OnActivated(args);
         }
     }
 }

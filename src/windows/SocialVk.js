@@ -3,6 +3,10 @@ module.exports = {
     init: function (appId, success, error) {
         self = this;
         this.vkobj = new Social.SocialVk();
+        WinJS.Application.addEventListener("activated", function (arg) {
+            console.log("Application activated", arg);
+            self.vkobj.onActivated(arg.detail);
+        });
         this.vkobj.addEventListener("callback", function (arg) {
             console.log("Callback from SocialVk.", arg);
             cb = self.cbmap[arg.callbackid];

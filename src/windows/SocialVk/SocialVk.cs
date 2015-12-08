@@ -27,9 +27,20 @@ namespace Social
 
     public sealed class SocialVk
     {
+        private static SocialVk instance;
         public event EventHandler<EventArgs> callback;
         private int lastCbId = 0;
         private CoreDispatcher dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+
+        public SocialVk() {
+            instance = this;
+        }
+
+        public static SocialVk Instance {
+            get {
+                return instance;
+            }
+        }
 
         private void sendResult(int cbid = 0, string result = "", string error = "") {
             if (cbid <= 0) cbid = lastCbId;
@@ -43,24 +54,24 @@ namespace Social
                 Debug.WriteLine("SocialVk: Callback not defined!");
         }
 
-        public void test1(string args, int cbid) {
+        public void OnActivated(IActivatedEventArgs args) {
             try {
-                string res = "input " + args;
-                VKCaptchaRequestUserControl cap = new VKCaptchaRequestUserControl();
-                if (callback != null) callback(this, new EventArgs() { callbackid = cbid, result = res, error = "" });
-            } catch(Exception e) {
-                sendResult(cbid, "", e.ToString());
-            }
-        }
-
-        public static void OnActivated(IActivatedEventArgs args) {
-            if (args.Kind == ActivationKind.Protocol) {
-                var protocolArgs = args as ProtocolActivatedEventArgs;
-                VK.WindowsPhone.SDK_XAML.VKProtocolActivationHelper.HandleProtocolLaunch(protocolArgs);
+                if (args.Kind == ActivationKind.Protocol) {
+                    var protocolArgs = args as ProtocolActivatedEventArgs;
+                    if (protocolArgs != null) 
+                        VK.WindowsPhone.SDK_XAML.VKProtocolActivationHelper.HandleProtocolLaunch(protocolArgs);
+                    else {
+                        var webProtocolArgs = args as Windows.UI.WebUI.WebUIProtocolActivatedEventArgs;
+                        VK.WindowsPhone.SDK_XAML.VKProtocolActivationHelper.HandleWebProtocolLaunch(webProtocolArgs);
+                    }
+                }
+            } catch (Exception e) {
+                sendResult(0, "", e.ToString());
             }
         }
 
         public void init(string appId, int cbid) {
+
             VKSDK.AccessTokenReceived += (sender, arg) => {
                 Debug.WriteLine("Access token recieved " + arg);
                 JObject res = new JObject();

@@ -107,10 +107,38 @@
     <config-file target="VKConfig.xml" parent="/Extensions">
         <Protocol Name="vk$VK_APP_ID" />
     </config-file>
-    <config-file target="Package.appxmanifest" target-dir="/Package/Applications/Application/Extensions">
-      <Extension Category="windows.protocol"> 
-        <Protocol Name="vk$VK_APP_ID" m2:DesiredView="useLess"/> 
-      </Extension> 
+    <config-file target="Package.appxmanifest" parent="/Package/Applications/Application">
+      <Extensions>
+        <Extension Category="windows.protocol"> 
+          <Protocol Name="vk$VK_APP_ID" m2:DesiredView="useLess"/> 
+        </Extension>
+      </Extensions>
+    </config-file>
+    <config-file target="Package.phone.appxmanifest" parent="/Package/Applications/Application">
+      <Extensions>
+        <Extension Category="windows.protocol">
+          <Protocol Name="vk$VK_APP_ID" m2:DesiredView="useLess"/>
+        </Extension>
+      </Extensions>
+    </config-file>
+    <config-file target="Package.windows.appxmanifest" parent="/Package/Applications/Application">
+      <Extensions>
+        <Extension Category="windows.protocol">
+          <Protocol Name="vk$VK_APP_ID" m2:DesiredView="useLess"/>
+        </Extension>
+      </Extensions>
+    </config-file>
+    <config-file target="Package.windows10.appxmanifest" parent="/Package/Applications/Application">
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="vk$VK_APP_ID"/>
+        </uap:Extension>
+      </Extensions>
+    </config-file>
+    <config-file target="Package.windows80.appxmanifest" parent="/Package/Applications/Application/Extensions">
+      <Extension Category="windows.protocol">
+        <Protocol Name="vk$VK_APP_ID" m2:DesiredView="useLess"/>
+      </Extension>
     </config-file>
     <framework src="src/wp/Newtonsoft.Json.dll" custom="true"/>
     <framework src="src/windows/VK.WindowsPhone.SDK-XAML.dll" custom="true"/>
