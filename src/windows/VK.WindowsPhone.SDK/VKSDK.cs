@@ -180,6 +180,10 @@ namespace VK.WindowsPhone.SDK
 
             switch (loginType)
             {
+                case LoginType.Browser:
+                    AuthorizeBrowser(scopeList, revoke);
+                    break;
+
                 case LoginType.VKApp:
 
                     AuthorizeVKApp(scopeList, revoke);
@@ -207,6 +211,10 @@ namespace VK.WindowsPhone.SDK
         private static void AuthorizeVKApp(List<string> scopeList, bool revoke)
         {
             VKAppLaunchAuthorizationHelper.AuthorizeVKApp("", VKSDK.Instance.CurrentAppID, scopeList, revoke);
+        }
+
+        private static void AuthorizeBrowser(List<string> scopeList, bool revoke) {
+            VKAppLaunchAuthorizationHelper.AuthorizeBrowser("", VKSDK.Instance.CurrentAppID, scopeList, revoke);
         }
 
 #if SILVERLIGHT

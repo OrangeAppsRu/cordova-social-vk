@@ -40,9 +40,7 @@ namespace VK.WindowsPhone.SDK
 
             try
             {
-
                 await Launcher.LaunchUriAsync(new Uri(uriString), new LauncherOptions() { FallbackUri = new Uri(fallbackUri) });
-
             }
             catch (Exception)
             {
@@ -52,8 +50,37 @@ namespace VK.WindowsPhone.SDK
                 MessageBox.Show(msg);
 #endif
             }
+        }
 
+        public static async Task AuthorizeBrowser(
+            string state,
+            string clientId,
+            List<string> scopeList,
+            bool revoke) {
+            string redirectUri = await GetRedirectUri();
 
+            var uriString = string.Format(_launchUriStrFrm,
+                WebUtility.UrlEncode(state == null ? string.Empty : state),
+                clientId,
+                StrUtil.GetCommaSeparated(scopeList),
+                revoke,
+                redirectUri);
+
+            var fallbackUri = string.Format(VKSDK.VK_AUTH_STR_FRM,
+                VKSDK.Instance.CurrentAppID,
+               scopeList.GetCommaSeparated(),
+               WebUtility.UrlEncode("vk" + clientId + "://authorize"),
+               VKSDK.API_VERSION,
+               revoke ? 1 : 0);
+
+            try {
+                await Launcher.LaunchUriAsync(new Uri(fallbackUri));
+            } catch (Exception) {
+#if SILVERLIGHT
+                var msg = "VK App authorization is not supported for this type of the project. Please, use WebView authorization.";
+                MessageBox.Show(msg);
+#endif
+            }
         }
 
         private static async Task<string> GetRedirectUri()

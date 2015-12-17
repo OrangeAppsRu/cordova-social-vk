@@ -62,10 +62,10 @@ namespace Social
                 if (args.Kind == ActivationKind.Protocol) {
                     var protocolArgs = args as ProtocolActivatedEventArgs;
                     if (protocolArgs != null) 
-                        VK.WindowsPhone.SDK_XAML.VKProtocolActivationHelper.HandleProtocolLaunch(protocolArgs);
+                        VK.WindowsPhone.SDK.VKProtocolActivationHelper.HandleProtocolLaunch(protocolArgs);
                     else {
                         var webProtocolArgs = args as Windows.UI.WebUI.WebUIProtocolActivatedEventArgs;
-                        VK.WindowsPhone.SDK_XAML.VKProtocolActivationHelper.HandleWebProtocolLaunch(webProtocolArgs);
+                        VK.WindowsPhone.SDK.VKProtocolActivationHelper.HandleWebProtocolLaunch(webProtocolArgs);
                     }
                 }
             } catch (Exception e) {
@@ -125,7 +125,7 @@ namespace Social
                     //    () =>
                     //    {
                             try {
-                                string err = VKSDK.Authorize(scope, false, false, LoginType.VKApp);
+                                string err = VKSDK.Authorize(scope, false, false, LoginType.Browser);
                                 if (err != null)
                                     sendResult(cbid, "", err);
                             } catch (Exception e) {

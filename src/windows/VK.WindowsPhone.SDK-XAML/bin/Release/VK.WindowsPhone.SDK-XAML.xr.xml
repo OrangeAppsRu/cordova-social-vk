@@ -5,14 +5,13 @@
     <RootPropertyPathName Name="Captcha_Cancel" />
     <RootPropertyPathName Name="Captcha_Send" />
     <RootPropertyPathName Name="Captcha_RequiredText" />
-    <RootPropertyPathName Name="Error" />
   </Roots.PropertyPathNames>
   <Roots.RootTypes>
-    <RootType FullName="VK.WindowsPhone.SDK_XAML.Pages.VKPopupControlBase">
+    <RootType FullName="VK.WindowsPhone.SDK.Pages.VKPopupControlBase">
       <RootProperty Name="Resources" />
       <RootProperty Name="Content" />
     </RootType>
-    <RootType FullName="VK.WindowsPhone.SDK_XAML.Strings.VKLocalizedStrings" />
+    <RootType FullName="VK.WindowsPhone.SDK.Strings.VKLocalizedStrings" />
     <RootType FullName="Windows.UI.Xaml.Controls.Grid">
       <RootProperty Name="Children" />
       <RootProperty Name="Background" />
@@ -68,11 +67,14 @@
       <RootProperty Name="Source" />
       <RootProperty Name="Path" />
     </RootType>
-    <RootType FullName="VK.WindowsPhone.SDK_XAML.Pages.VKCaptchaRequestUserControl" />
+    <RootType FullName="VK.WindowsPhone.SDK.Pages.VKCaptchaRequestUserControl" />
+    <RootType FullName="Windows.UI.Xaml.Controls.Page">
+      <RootProperty Name="Content" />
+    </RootType>
     <RootType FullName="Windows.UI.Xaml.Controls.WebView" />
     <RootType FullName="Windows.UI.Xaml.Controls.ProgressBar">
       <RootProperty Name="IsIndeterminate" />
     </RootType>
-    <RootType FullName="VK.WindowsPhone.SDK_XAML.Pages.VKLoginUserControl" />
+    <RootType FullName="VK.WindowsPhone.SDK.Pages.VKLoginUserControl" />
   </Roots.RootTypes>
 </Roots>

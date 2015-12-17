@@ -1,5 +1,6 @@
 <XamlCompilerSaveState>
   <ReferenceAssemblyList>
-    <ReferenceAssembly PathName="c:\users\василий\cordova-social-vk\src\windows\socialvk\bin\release\social.winmd" HashGuid="cd4d7d78-84a5-af3d-9d8c-9db51af6b8a2" />
+    <LocalAssembly PathName="c:\users\василий\cordova-social-vk\src\windows\testapp\testapp.windowsphone\obj\release\intermediatexaml\testapp.windowsphone.exe" HashGuid="15985630-5f7c-6e09-53d3-690a4ea93932" />
+    <ReferenceAssembly PathName="c:\users\василий\cordova-social-vk\src\windows\socialvk\bin\release\social.winmd" HashGuid="caf69c84-3e27-5104-661d-dc5def53bcb4" />
   </ReferenceAssemblyList>
 </XamlCompilerSaveState>

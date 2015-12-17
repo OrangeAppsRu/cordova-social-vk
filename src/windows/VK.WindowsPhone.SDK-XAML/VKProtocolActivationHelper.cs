@@ -7,7 +7,7 @@ using VK.WindowsPhone.SDK;
 using VK.WindowsPhone.SDK.Util;
 using Windows.ApplicationModel.Activation;
 
-namespace VK.WindowsPhone.SDK_XAML
+namespace VK.WindowsPhone.SDK
 {
     public static class VKProtocolActivationHelper
     {
