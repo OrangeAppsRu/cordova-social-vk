@@ -32,6 +32,7 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKRequest.VKRequestListener;
@@ -315,7 +316,7 @@ public class SocialVk extends CordovaPlugin {
                     final String token = res.accessToken;
                     Log.i(TAG, "VK new token: "+token);
                     res.saveTokenToSharedPreferences(getApplicationContext(), sTokenKey);
-                    VKRequest request = VKApi.users().get();
+                    VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "id, nickname, first_name, last_name, sex, bdate, timezone, photo, photo_big, city, country"));
                     request.executeWithListener(new VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
