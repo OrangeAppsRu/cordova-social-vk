@@ -529,7 +529,3 @@ namespace TestApp.TestApp_WindowsPhone_XamlTypeInfo
 }
 
 
-
-
-
-

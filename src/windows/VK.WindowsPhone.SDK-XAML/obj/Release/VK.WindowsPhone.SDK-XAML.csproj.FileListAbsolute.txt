@@ -37,7 +37,6 @@ C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\b
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Release\VK.WindowsPhone.SDK-XAML.pdb
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Release\VK.WindowsPhone.SDK-XAML.pri
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\bin\Release\Newtonsoft.Json.dll
-C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\VK.WindowsPhone.SDK-XAML.csprojResolveAssemblyReference.cache
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKCaptchaRequestUserControl.g.i.cs
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKCaptchaRequestUserControl.g.cs
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKLoginUserControl.g.i.cs
