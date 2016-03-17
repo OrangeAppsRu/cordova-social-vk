@@ -1,0 +1,26 @@
+{
+    "name": "cordova-social-vk",
+    "version": "1.0.0",
+    "description": "Cordova Plugin for Russian social network VKontakte (http://vk.com)",
+    "cordova": {
+        "id": "cordova-social-vk",
+        "platforms": [
+            "android",
+            "ios"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DrMoriarty/cordova-social-vk"
+    },
+    "keywords": [
+        "cordova",
+        "vk",
+        "vkontakte",
+        "ecosystem:cordova",
+        "cordova-android",
+        "cordova-ios"
+    ],
+    "author": "DrMoriarty",
+    "license": "MIT License"
+}
