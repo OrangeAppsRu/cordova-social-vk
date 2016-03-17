@@ -19,6 +19,7 @@ c:\users\василий\documents\visual studio 2015\Projects\WindowsRuntimeComp
 c:\users\василий\documents\visual studio 2015\Projects\WindowsRuntimeComponent1\WindowsRuntimeComponent1\obj\Release\Social.pdb
 c:\users\василий\documents\visual studio 2015\Projects\WindowsRuntimeComponent1\WindowsRuntimeComponent1\obj\Release\Social.winmdobj
 c:\users\василий\documents\visual studio 2015\Projects\WindowsRuntimeComponent1\WindowsRuntimeComponent1\obj\Release\Social.compile.pdb
+C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Release\SocialVk.csprojResolveAssemblyReference.cache
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\Social.winmd
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\Social.pdb
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\Social.pri
@@ -26,7 +27,6 @@ C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\Newto
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\VK.WindowsPhone.SDK-XAML.dll
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\VK.WindowsPhone.SDK-XAML.pdb
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\bin\Release\VK.WindowsPhone.SDK-XAML.pri
-C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Release\SocialVk.csprojResolveAssemblyReference.cache
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Release\Social.winmd
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Release\Social.pdb
 C:\Users\Василий\cordova-social-vk\src\windows\SocialVk\obj\Release\Social.winmdobj

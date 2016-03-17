@@ -15,8 +15,6 @@ C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPho
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\TestApp.WindowsPhone.exe
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\TestApp.WindowsPhone.pdb
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\resources.pri
-C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\AppxManifest.xml
-C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\TestApp.WindowsPhone.build.appxrecipe
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\Social.winmd
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\VK.WindowsPhone.SDK-XAML.dll
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\bin\Release\Newtonsoft.Json.dll
@@ -39,4 +37,3 @@ C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPho
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Release\qualifiers.txt
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Release\qualifiers.txt.intermediate
 C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Release\MultipleQualifiersPerDimensionFound.txt
-C:\Users\Василий\cordova-social-vk\src\windows\TestApp\TestApp.WindowsPhone\obj\Release\ProjectArchitectures.txt

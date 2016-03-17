@@ -43,10 +43,10 @@ C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\o
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKLoginUserControl.g.cs
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\XamlTypeInfo.g.cs
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKCaptchaRequestUserControl.xaml
-C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKCaptchaRequestUserControl.xbf
-C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\XamlSaveStateFile.xml
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKLoginUserControl.xaml
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKCaptchaRequestUserControl.xbf
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\Pages\VKLoginUserControl.xbf
+C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\XamlSaveStateFile.xml
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\VK.WindowsPhone.SDK-XAML.dll
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\VK.WindowsPhone.SDK-XAML.pdb
 C:\Users\Василий\cordova-social-vk\src\windows\VK.WindowsPhone.SDK-XAML\obj\Release\priconfig.xml

@@ -125,7 +125,7 @@ namespace Social
                     //    () =>
                     //    {
                             try {
-                                string err = VKSDK.Authorize(scope, false, false, LoginType.Browser);
+                                string err = VKSDK.Authorize(scope, false, false, LoginType.VKApp);
                                 if (err != null)
                                     sendResult(cbid, "", err);
                             } catch (Exception e) {
