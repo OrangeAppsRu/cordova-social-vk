@@ -21,7 +21,7 @@
 
 package com.vk.sdk;
 
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 /**
  * Use this class for track access token changes.

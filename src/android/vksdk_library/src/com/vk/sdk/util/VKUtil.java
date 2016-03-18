@@ -21,6 +21,7 @@
 
 package com.vk.sdk.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -28,7 +29,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.vk.sdk.VKSdk;
@@ -151,6 +152,7 @@ public class VKUtil {
         try {
 	        if (ctx == null || ctx.getPackageManager() == null)
 		        return null;
+            @SuppressLint("PackageManagerGetSignatures")
             PackageInfo info = ctx.getPackageManager().getPackageInfo(
                     packageName,
                     PackageManager.GET_SIGNATURES);
@@ -160,7 +162,6 @@ public class VKUtil {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-//                result[i++] = Base64.encodeToString(md.digest(), Base64.DEFAULT);
                 result[i++] = toHex(md.digest());
             }
             return result;

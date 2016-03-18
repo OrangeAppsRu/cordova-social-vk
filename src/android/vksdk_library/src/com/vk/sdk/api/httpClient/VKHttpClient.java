@@ -25,8 +25,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import com.android.annotations.NonNull;
-import com.android.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Pair;
 
@@ -68,6 +68,8 @@ import java.util.zip.GZIPInputStream;
  * Class provides configured http client for API request loading
  */
 public class VKHttpClient {
+
+    public static final String sDefaultStringEncoding = "UTF-8";
 
     /**
      * Prepares new "normal" request from VKRequest
@@ -162,8 +164,6 @@ public class VKHttpClient {
     }
 
     public static VKHttpResponse execute(VKHTTPRequest request) throws IOException {
-        CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
-
         VKHttpResponse response = new VKHttpResponse(request.createConnection(), null);
         if (request.isAborted) {
             return null;
@@ -208,7 +208,7 @@ public class VKHttpClient {
                 String query = getQuery();
                 if (query != null && query.length() > 0) {
                     BufferedWriter writer = new BufferedWriter(
-                            new OutputStreamWriter(os, "UTF-8"));
+                            new OutputStreamWriter(os, sDefaultStringEncoding));
                     writer.write(query);
                     writer.flush();
                     writer.close();
@@ -248,9 +248,13 @@ public class VKHttpClient {
             if (this.parameters == null) {
                 return null;
             }
+
             ArrayList<String> params = new ArrayList<>(this.parameters.size());
             for (Pair<String, String> pair : this.parameters) {
-                params.add(String.format("%s=%s", URLEncoder.encode(pair.first, "UTF-8"), URLEncoder.encode(pair.second, "UTF-8")));
+                if (pair.first == null || pair.second == null) {
+                    continue;
+                }
+                params.add(String.format("%s=%s", URLEncoder.encode(pair.first, sDefaultStringEncoding), URLEncoder.encode(pair.second, sDefaultStringEncoding)));
             }
             return TextUtils.join("&", params);
         }

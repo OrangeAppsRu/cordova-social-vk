@@ -29,7 +29,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 /**
  * Class for VK authorization and dialogs helping

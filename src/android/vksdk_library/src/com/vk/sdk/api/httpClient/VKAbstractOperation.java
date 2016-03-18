@@ -21,7 +21,7 @@
 
 package com.vk.sdk.api.httpClient;
 
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 import com.vk.sdk.api.VKError;
 

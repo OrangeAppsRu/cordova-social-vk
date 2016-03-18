@@ -32,8 +32,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import com.android.annotations.NonNull;
-import com.android.annotations.Nullable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -41,6 +41,7 @@ import android.webkit.CookieSyncManager;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.dialogs.VKOpenAuthDialog;
 import com.vk.sdk.payments.VKPaymentsCallback;
 import com.vk.sdk.payments.VKPaymentsReceiver;
 import com.vk.sdk.util.VKUtil;
@@ -188,12 +189,9 @@ public class VKSdk {
                 throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
             }
         } else {
-            /*
             if (!hasInStack(Application.class, "onCreate")) {
                 throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
             }
-            VK devs are very strange people
-            */
         }
 
         int appId = getIntResByName(ctx, SDK_APP_ID);
@@ -236,37 +234,33 @@ public class VKSdk {
     }
 
     /**
-     * Starts authorization process. If VK app is available in system, it will opens and requests access from user.
-     * Otherwise UIWebView with standard UINavigationBar will be opened for access request.
+     * Starts authorization process. If VK app is available in the system, it will be opened
+     * to request access from user. Otherwise, UIWebView with standard UINavigationBar will be used.
      *
      * @param activity current running activity
-     * @param scope    array of permissions for your applications. All permissions you can
+     * @param scope    array of permissions for your applications
      */
     public static void login(@NonNull Activity activity, String... scope) {
         VKServiceActivity.startLoginActivity(activity, requestedPermissions = preparingScopeList(scope));
     }
 
     /**
-     * Starts authorization process. If VK app is available in system, it will opens and requests access from user.
-     * Otherwise UIWebView with standard UINavigationBar will be opened for access request.
+     * Starts authorization process. If VK app is available in the system, it will be opened
+     * to request access from user. Otherwise, UIWebView with standard UINavigationBar will be used.
      *
      * @param fragment current running fragment
-     * @param scope    array of permissions for your applications. All permissions you can
+     * @param scope    array of permissions for your applicationss
      */
     public static void login(@NonNull Fragment fragment, String... scope) {
         VKServiceActivity.startLoginActivity(fragment, requestedPermissions = preparingScopeList(scope));
     }
 
-    public static boolean onActivityResult(int requestCode, int resultCode, @NonNull Intent data, @NonNull VKCallback<VKAccessToken> vkCallback) {
+    public static boolean onActivityResult(int requestCode, int resultCode, @Nullable Intent data, @NonNull VKCallback<VKAccessToken> vkCallback) {
         if (requestCode == VKServiceActivity.VKServiceType.Authorization.getOuterCode()) {
             if (resultCode == VKSdk.RESULT_OK) {
                 vkCallback.onResult(VKAccessToken.currentToken());
             } else if (resultCode == VKSdk.RESULT_ERROR) {
-                try {
-                    vkCallback.onError((VKError) VKObject.getRegisteredObject(data.getLongExtra(VKSdk.EXTRA_ERROR_ID, 0)));
-                } catch (NullPointerException e) {
-                    // do nothing
-                }
+                vkCallback.onError((VKError) VKObject.getRegisteredObject(data == null ? 0 : data.getLongExtra(VKSdk.EXTRA_ERROR_ID, 0)));
             }
             return true;
         } else {
@@ -311,9 +305,9 @@ public class VKSdk {
 
         CheckTokenResult tokenResult;
         Map<String, String> tokenParams = null;
-        if (result.hasExtra(VKOpenAuthActivity.VK_EXTRA_TOKEN_DATA)) {
+        if (result.hasExtra(VKOpenAuthDialog.VK_EXTRA_TOKEN_DATA)) {
             //Token received via webview
-            String tokenInfo = result.getStringExtra(VKOpenAuthActivity.VK_EXTRA_TOKEN_DATA);
+            String tokenInfo = result.getStringExtra(VKOpenAuthDialog.VK_EXTRA_TOKEN_DATA);
             tokenParams = VKUtil.explodeQueryString(tokenInfo);
         } else if (result.getExtras() != null) {
             //Token received via VK app
@@ -328,8 +322,9 @@ public class VKSdk {
             callback.onError(tokenResult.error);
         } else if (tokenResult.token != null) {
             if (tokenResult.oldToken != null) {
-                VKRequest validationRequest = VKRequest.getRegisteredRequest(result.getLongExtra(VKOpenAuthActivity.VK_EXTRA_VALIDATION_REQUEST, 0));
+                VKRequest validationRequest = VKRequest.getRegisteredRequest(result.getLongExtra(VKOpenAuthDialog.VK_EXTRA_VALIDATION_REQUEST, 0));
                 if (validationRequest != null) {
+                    validationRequest.unregisterObject();
                     validationRequest.repeat();
                 }
             } else {
@@ -466,9 +461,7 @@ public class VKSdk {
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.removeAllCookie();
         } else {
-            //CookieManager.getInstance().removeAllCookies(null);
-            // XDK with crosswalk 7 can not build this ^
-            // error: cannot find symbol removeAllCookies
+            CookieManager.getInstance().removeAllCookies(null);
         }
 
         VKAccessToken.replaceToken(VKUIHelper.getApplicationContext(), null);

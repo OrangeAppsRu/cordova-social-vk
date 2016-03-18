@@ -21,7 +21,7 @@
 
 package com.vk.sdk.api.httpClient;
 
-import com.android.annotations.Nullable;
+import android.support.annotation.Nullable;
 
 import com.vk.sdk.api.VKError;
 
@@ -140,7 +140,7 @@ public class VKHttpOperation<ResponseType> extends VKAbstractOperation {
         }
         if (mResponseString == null) {
             try {
-                mResponseString = new String(response.responseBytes, "UTF-8");
+                mResponseString = new String(response.responseBytes, VKHttpClient.sDefaultStringEncoding);
             } catch (UnsupportedEncodingException e) {
                 mLastException = e;
             }
