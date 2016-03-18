@@ -32,8 +32,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import com.android.annotations.NonNull;
+import com.android.annotations.Nullable;
 import android.text.TextUtils;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -189,9 +189,12 @@ public class VKSdk {
                 throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
             }
         } else {
+            /*
             if (!hasInStack(Application.class, "onCreate")) {
                 throw new RuntimeException("VKSdk.initialize(Context) must be call from Application#onCreate()");
             }
+            VK devs are very strange people
+            */
         }
 
         int appId = getIntResByName(ctx, SDK_APP_ID);

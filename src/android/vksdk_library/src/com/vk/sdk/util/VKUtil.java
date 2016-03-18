@@ -29,7 +29,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
-import android.support.annotation.Nullable;
+import com.android.annotations.Nullable;
 import android.util.Log;
 
 import com.vk.sdk.VKSdk;

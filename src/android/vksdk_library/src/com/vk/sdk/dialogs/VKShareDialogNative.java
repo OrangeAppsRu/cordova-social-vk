@@ -28,7 +28,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import com.android.annotations.NonNull;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class VKShareDialogNative extends DialogFragment implements VKShareDialogDelegate.DialogFragmentI {

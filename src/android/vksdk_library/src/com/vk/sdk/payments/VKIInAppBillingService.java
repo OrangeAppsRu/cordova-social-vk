@@ -29,7 +29,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
+import com.android.annotations.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 

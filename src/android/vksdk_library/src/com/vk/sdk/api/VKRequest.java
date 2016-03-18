@@ -25,7 +25,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import com.android.annotations.Nullable;
 import android.util.Log;
 
 import com.vk.sdk.VKAccessToken;

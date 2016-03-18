@@ -34,6 +34,7 @@
     <source-file src="src/ios/NSData+Base64.h" />
     <source-file src="src/ios/NSData+Base64.m" />
     <framework src="src/ios/VKSdk.framework" custom="true"/>
+    <framework src="SafariServices.framework" custom="false"/>
     <resource-file src="src/ios/VKSdkResources.bundle" />
 
     <config-file target="*-Info.plist" parent="CFBundleURLTypes">
@@ -48,6 +49,11 @@
             <string>vk$VK_APP_ID</string>
           </array>
         </dict>
+      </array>
+    </config-file>
+    <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+      <array>
+        <string>vkauthorize</string>
       </array>
     </config-file>
   </platform>

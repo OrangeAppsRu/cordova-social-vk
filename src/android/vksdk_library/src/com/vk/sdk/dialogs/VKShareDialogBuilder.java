@@ -128,10 +128,6 @@ public class VKShareDialogBuilder {
 		new VKShareDialogNative(this).show(manager, tag);
 	}
 
-	public void show(android.support.v4.app.FragmentManager manager, String tag) {
-		new VKShareDialog(this).show(manager, tag);
-	}
-
 	public interface VKShareDialogListener {
 		void onVkShareComplete(int postId);
 
