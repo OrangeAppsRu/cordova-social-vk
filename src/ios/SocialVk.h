@@ -4,7 +4,7 @@
 #import <Cordova/CDV.h>
 #import <VKSdk/VKSdk.h>
 
-@interface SocialVk : CDVPlugin <VKSdkDelegate>
+@interface SocialVk : CDVPlugin <VKSdkDelegate, VKSdkUIDelegate>
 {
     NSString*     clientId;
 }

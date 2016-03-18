@@ -23,11 +23,17 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     
     if(!inited) {
         NSString *appId = [[NSString alloc] initWithString:[command.arguments objectAtIndex:0]];
-        [VKSdk initializeWithDelegate:self andAppId:appId];
-        if(![VKSdk wakeUpSession]) {
-            NSLog(@"VK init error!");
-        }
-        
+        [VKSdk initializeWithAppId:appId];
+        [VKSdk.instance registerDelegate:self];
+        VKSdk.instance.uiDelegate = self;
+        [VKSdk wakeUpSession:@[VK_PER_OFFLINE] completeBlock:^(VKAuthorizationState state, NSError *err) {
+            if(err) {
+                NSLog(@"VK init error: %@", err);
+            }
+            if(state == VKAuthorizationAuthorized) {
+                NSLog(@"VK user authorized with token %@", [VKSdk accessToken].accessToken);
+            }
+        }];
         NSLog(@"SocialVk Plugin initalized");
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myOpenUrl:) name:CDVPluginHandleOpenURLNotification object:nil];
@@ -60,7 +66,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     if(![VKSdk isLoggedIn]) {
         [self vkLoginWithPermissions:permissions andBlock:^(NSString *token, NSString *error) {
             if(token) {
-                VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{@"fields": @"id, nickname, first_name, last_name, sex, bdate, timezone, photo, photo_big, city, country"} andHttpMethod:@"GET"];
+                VKRequest *req = [VKRequest requestWithMethod:@"users.get" parameters:@{@"fields": @"id, nickname, first_name, last_name, sex, bdate, timezone, photo, photo_big, city, country"}];
                 [req executeWithResultBlock:^(VKResponse *response) {
                     NSLog(@"User response %@", response);
                     
@@ -87,8 +93,8 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:loginDetails];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } else {
-            VKAccessToken *token = [VKSdk getAccessToken];
-            VKRequest *req = [VKRequest requestWithMethod:@"users.get" andParameters:@{@"fields": @"sex,bdate,city,country,screen_name,photo_50,photo_200_orig"} andHttpMethod:@"GET"];
+            VKAccessToken *token = [VKSdk accessToken];
+            VKRequest *req = [VKRequest requestWithMethod:@"users.get" parameters:@{@"fields": @"sex,bdate,city,country,screen_name,photo_50,photo_200_orig"}];
             [req executeWithResultBlock:^(VKResponse *response) {
                 NSLog(@"User response %@", response);
                 CDVPluginResult* pluginResult = nil;
@@ -122,7 +128,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
             CDVPluginResult* pluginResult = nil;
             if(token) {
                 VKShareDialogController *sh = [VKShareDialogController new];
-                [sh setWantsFullScreenLayout:YES];
+                sh.edgesForExtendedLayout = UIRectEdgeAll;
                 sh.shareLink = [[VKShareLink alloc] initWithTitle:sourceURL link:[NSURL URLWithString:sourceURL]];
                 sh.text =  description;
                 //sh.uploadImages = @[[VKUploadImage uploadImageWithData:imageData andParams:nil]];
@@ -138,12 +144,13 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
         }];
     } else {
         VKShareDialogController *sh = [VKShareDialogController new];
-        [sh setWantsFullScreenLayout:YES];
+        sh.edgesForExtendedLayout = UIRectEdgeAll;
         sh.shareLink = [[VKShareLink alloc] initWithTitle:sourceURL link:[NSURL URLWithString:sourceURL]];
         sh.text =  description;
         //sh.uploadImages = @[[VKUploadImage uploadImageWithData:imageData andParams:nil]];
         UIViewController *vc = [self findViewController];
-        [sh presentIn:vc];
+        sh.dismissAutomatically = YES;
+        [vc presentViewController:sh animated:YES completion:nil];
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
@@ -154,10 +161,11 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     vkCallBackBlock = [block copy];
     if(!permissions || permissions.count < 1)
     permissions = @[VK_PER_WALL, VK_PER_OFFLINE];
-    BOOL inApp = YES;
-    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:VK_AUTHORIZE_URL_STRING]])
-        inApp = NO;
-    [VKSdk authorize:permissions revokeAccess:NO forceOAuth:NO inApp:inApp display:VK_DISPLAY_IOS];
+    //BOOL inApp = YES;
+    //if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:VK_AUTHORIZE_URL_STRING]])
+    //    inApp = NO;
+    //[VKSdk authorize:permissions revokeAccess:NO forceOAuth:NO inApp:inApp display:VK_DISPLAY_IOS];
+    [VKSdk authorize:permissions];
 }
 
 -(void)logout:(CDVInvokedUrlCommand *)command
@@ -312,7 +320,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     NSString *order = [command.arguments objectAtIndex:1];
     NSNumber *count = [command.arguments objectAtIndex:2];
     NSNumber *offset = [command.arguments objectAtIndex:3];
-    VKRequest *req = [VKRequest requestWithMethod:@"friends.getOnline" andParameters:@{VK_API_USER_ID: user_id, VK_API_ORDER:order, VK_API_COUNT: count, VK_API_OFFSET: offset} andHttpMethod:@"POST"];
+    VKRequest *req = [VKRequest requestWithMethod:@"friends.getOnline" parameters:@{VK_API_USER_ID: user_id, VK_API_ORDER:order, VK_API_COUNT: count, VK_API_OFFSET: offset}];
     [self performRequest:req withCommand:command];
 }
 
@@ -329,14 +337,14 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     } else if([target_uid isKindOfClass:NSString.class]) {
         params[@"target_uids"] = target_uid;
     }
-    VKRequest *req = [VKRequest requestWithMethod:@"friends.getMutual" andParameters:params andHttpMethod:@"POST"];
+    VKRequest *req = [VKRequest requestWithMethod:@"friends.getMutual" parameters:params];
     [self performRequest:req withCommand:command];
 }
 
 - (void)friends_getRecent:(CDVInvokedUrlCommand*)command
 {
     NSNumber *count = [command.arguments objectAtIndex:0];
-    VKRequest *req = [VKRequest requestWithMethod:@"friends.getRecent" andParameters:@{VK_API_COUNT: count} andHttpMethod:@"POST"];
+    VKRequest *req = [VKRequest requestWithMethod:@"friends.getRecent" parameters:@{VK_API_COUNT: count}];
     [self performRequest:req withCommand:command];
 }
 
@@ -349,7 +357,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     NSNumber *out_ = [command.arguments objectAtIndex:4];
     NSNumber *sort = [command.arguments objectAtIndex:5];
     NSNumber *suggested = [command.arguments objectAtIndex:6];
-    VKRequest *req = [VKRequest requestWithMethod:@"friends.getRequests" andParameters:@{VK_API_OFFSET: offset, VK_API_COUNT: count, VK_API_EXTENDED: extended, @"needs_mutual": needs_mutual, @"out": out_, VK_API_SORT: sort, @"suggested": suggested} andHttpMethod:@"POST"];
+    VKRequest *req = [VKRequest requestWithMethod:@"friends.getRequests" parameters:@{VK_API_OFFSET: offset, VK_API_COUNT: count, VK_API_EXTENDED: extended, @"needs_mutual": needs_mutual, @"out": out_, VK_API_SORT: sort, @"suggested": suggested}];
     [self performRequest:req withCommand:command];
 }
 
@@ -357,64 +365,67 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 {
     NSString *method = [command.arguments objectAtIndex:0];
     NSDictionary *params = [command.arguments objectAtIndex:1];
-    VKRequest *req = [VKRequest requestWithMethod:method andParameters:params andHttpMethod:@"POST"];
+    VKRequest *req = [VKRequest requestWithMethod:method parameters:params];
     [self performRequest:req withCommand:command];
 }
 
 #pragma mark - VKSdkDelegate
 
--(void) vkSdkReceivedNewToken:(VKAccessToken*) newToken
+
+- (void)vkSdkAccessAuthorizationFinishedWithResult:(VKAuthorizationResult *)result;
+{
+    NSLog(@"VK Access authorization finished");
+    if(result.error) {
+        NSLog(@"VK Error %@", result.error);
+        if(vkCallBackBlock) {
+            vkCallBackBlock(nil, result.error.description);
+            vkCallBackBlock = nil;
+        } else if(savedCommand) {
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:result.error.description];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:savedCommand.callbackId];
+        }
+    }
+}
+
+- (void)vkSdkUserAuthorizationFailed;
+{
+    NSLog(@"VK User authorization failed");
+}
+
+- (void)vkSdkAccessTokenUpdated:(VKAccessToken *)newToken oldToken:(VKAccessToken *)oldToken;
 {
     NSLog(@"VK Token %@", newToken.accessToken);
     if(vkCallBackBlock) vkCallBackBlock(newToken.accessToken, nil);
     vkCallBackBlock = nil;
 }
 
-- (void)vkSdkAcceptedUserToken:(VKAccessToken *)token
+- (void)vkSdkTokenHasExpired:(VKAccessToken *)expiredToken;
 {
-    NSLog(@"VK Token %@", token.accessToken);
+    NSLog(@"VK Token has expired");
 }
 
-- (void)vkSdkRenewedToken:(VKAccessToken *)newToken
-{
-    NSLog(@"VK Token %@", newToken.accessToken);
-}
 
--(void) vkSdkUserDeniedAccess:(VKError*) authorizationError
-{
-    NSLog(@"VK Error %@", authorizationError);
-    if(vkCallBackBlock) {
-        vkCallBackBlock(nil, authorizationError.description);
-        vkCallBackBlock = nil;
-    } else if(savedCommand) {
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:authorizationError.description];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:savedCommand.callbackId];
-    }
-}
+#pragma mark - VKSdkUIDelegate
 
--(void) vkSdkShouldPresentViewController:(UIViewController *)controller
+- (void)vkSdkShouldPresentViewController:(UIViewController *)controller;
 {
     [[self findViewController] presentViewController:controller animated:YES completion:nil];
 }
 
--(void) vkSdkTokenHasExpired:(VKAccessToken *)expiredToken
-{
-    
-}
-
--(void) vkSdkNeedCaptchaEnter:(VKError *)captchaError
+- (void)vkSdkNeedCaptchaEnter:(VKError *)captchaError;
 {
     NSLog(@"Need captcha %@", captchaError);
 }
 
--(BOOL)vkSdkAuthorizationAllowFallbackToSafari
+- (void)vkSdkWillDismissViewController:(UIViewController *)controller;
 {
-    return NO;
+    NSLog(@"VK view controller will be dismissed");
 }
 
--(BOOL)vkSdkIsBasicAuthorization
+- (void)vkSdkDidDismissViewController:(UIViewController *)controller;
 {
-    return YES;
+    NSLog(@"VK view controller dismissed");
 }
+
 
 @end
