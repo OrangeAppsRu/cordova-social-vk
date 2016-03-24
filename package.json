@@ -1,6 +1,6 @@
 {
     "name": "cordova-social-vk",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Cordova Plugin for Russian social network VKontakte (http://vk.com)",
     "cordova": {
         "id": "cordova-social-vk",
