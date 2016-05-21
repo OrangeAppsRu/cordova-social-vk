@@ -314,6 +314,7 @@ public class SocialVk extends CordovaPlugin {
                 public void onResult(VKAccessToken res) {
                     // User passed Authorization
                     final String token = res.accessToken;
+                    final String email = res.email;
                     Log.i(TAG, "VK new token: "+token);
                     res.saveTokenToSharedPreferences(getApplicationContext(), sTokenKey);
                     VKRequest request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS, "id, nickname, first_name, last_name, sex, bdate, timezone, photo, photo_big, city, country"));
@@ -323,6 +324,7 @@ public class SocialVk extends CordovaPlugin {
                                 try {
                                     JSONObject loginDetails = new JSONObject();
                                     loginDetails.put("token", token);
+                                    loginDetails.put("email", email);
                                     loginDetails.put("user", response.json.getJSONArray("response"));
                                     _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, loginDetails.toString()));
                                     _callbackContext.success();
