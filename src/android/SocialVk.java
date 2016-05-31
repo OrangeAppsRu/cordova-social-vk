@@ -308,6 +308,11 @@ public class SocialVk extends CordovaPlugin {
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        if(resultCode == Activity.RESULT_CANCELED && data == null) {
+            // switch to another activity result callback
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
         Log.i(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
         if(!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
                 @Override
