@@ -86,12 +86,16 @@ public class SocialVk extends CordovaPlugin {
     }
 
     private void success() {
-        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-        _callbackContext.success();
+        if(_callbackContext != null) {
+            _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+            _callbackContext.success();
+        }
     }
     private void fail() {
-        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
-        _callbackContext.error("Error");
+        if(_callbackContext != null) {
+            _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR));
+            _callbackContext.error("Error");
+        }
     }
 
     @Override
@@ -238,9 +242,10 @@ public class SocialVk extends CordovaPlugin {
         this.cordova.setActivityResultCallback(this);
         Log.i(TAG, "VK initialize");
         VKSdk.initialize(getApplicationContext());
-
-        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
-        _callbackContext.success();
+        if(_callbackContext != null) {
+            _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+            _callbackContext.success();
+        }
         return true;
     }
 
@@ -331,8 +336,10 @@ public class SocialVk extends CordovaPlugin {
                                     loginDetails.put("token", token);
                                     loginDetails.put("email", email);
                                     loginDetails.put("user", response.json.getJSONArray("response"));
-                                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, loginDetails.toString()));
-                                    _callbackContext.success();
+                                    if(_callbackContext != null) {
+                                        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, loginDetails.toString()));
+                                        _callbackContext.success();
+                                    }
                                 } catch (JSONException exception) {
                                     Log.e(TAG, "JSON error:", exception);
                                     fail();
@@ -342,8 +349,10 @@ public class SocialVk extends CordovaPlugin {
                             public void onError(VKError error) {
                                 String err = error.toString();
                                 Log.e(TAG, err);
-                                _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
-                                _callbackContext.error(error.errorMessage);
+                                if(_callbackContext != null) {
+                                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
+                                    _callbackContext.error(error.errorMessage);
+                                }
                             }
                         });
                     //share(savedUrl, savedComment, savedImageUrl);
@@ -355,8 +364,10 @@ public class SocialVk extends CordovaPlugin {
                     String err = error.toString();
                     Log.e(TAG, "VK Authorization error! "+err);
                     //new AlertDialog.Builder(getApplicationContext()).setMessage(error.errorMessage).show();
-                    _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
-                    _callbackContext.error(error.errorMessage);
+                    if(_callbackContext != null) {
+                        _callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, err));
+                        _callbackContext.error(error.errorMessage);
+                    }
                 }
             })) {
             super.onActivityResult(requestCode, resultCode, data);
