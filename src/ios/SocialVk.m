@@ -170,6 +170,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 
 -(void)logout:(CDVInvokedUrlCommand *)command
 {
+    loginDetails = [NSMutableDictionary new];
     [VKSdk forceLogout];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
